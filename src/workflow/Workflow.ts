@@ -1,0 +1,28 @@
+import type { Application } from '../Application';
+import { Trigger } from './Trigger';
+
+export abstract class Workflow {
+  private application: Application;
+  private trigger: Trigger;
+
+  constructor(application: Application, trigger: Trigger) {
+    this.application = application;
+    this.trigger = trigger;
+  }
+
+  public async setup(): Promise<void> {
+    await this.trigger.init();
+  }
+
+  public async execute(): Promise<void> {
+    try {
+      this.application.emit('workflowStart', this);
+      await this.run();
+      this.application.emit('workflowFinish', this);
+    } catch (error) {
+      this.application.emit('workflowError', this, error);
+    }
+  }
+
+  public abstract run(): Promise<void>
+}

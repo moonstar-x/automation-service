@@ -2,14 +2,14 @@
   "name": "automation-service",
   "version": "1.0.0",
   "description": "A custom automation service to handle some notifications I need.",
-  "main": "./build/app.js",
+  "main": "./build/index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development ts-node-dev ./src/app.ts",
-    "dev:watch": "cross-env NODE_ENV=development nodemon ./src/app.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev ./src/index.ts",
+    "dev:watch": "cross-env NODE_ENV=development nodemon ./src/index.ts",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "esline ./src --ext .ts --fix",
     "build": "tsc --build",
-    "start": "node ./build/app.js"
+    "start": "node ./build/index.js"
   },
   "repository": {
     "type": "git",
