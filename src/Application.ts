@@ -1,6 +1,22 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-unused-vars */
 import { EventEmitter } from 'events';
 import { Workflow } from './workflow/Workflow';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
+
+interface ApplicationEvents {
+  workflowStart: [Workflow]
+  workflowFinish: [Workflow]
+  workflowError: [Workflow, Error]
+}
+
+export declare interface Application {
+  on<K extends keyof ApplicationEvents>(event: K, listener: (...args: ApplicationEvents[K]) => void): this
+  once<K extends keyof ApplicationEvents>(event: K, listener: (...args: ApplicationEvents[K]) => void): this
+  emit<K extends keyof ApplicationEvents>(event: K, ...args: ApplicationEvents[K]): boolean
+  off<K extends keyof ApplicationEvents>(event: K, listener: (...args: ApplicationEvents[K]) => void): this
+  removeAllListeners<K extends keyof ApplicationEvents>(event?: K): this
+}
 
 export interface ApplicationOptions {
   webhookManager: WebhookManagerOptions

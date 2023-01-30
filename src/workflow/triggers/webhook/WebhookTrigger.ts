@@ -21,7 +21,7 @@ export class WebhookTrigger extends Trigger {
   public init(): void {
     this.options.app.route(`/webhooks/${this.options.name}`)
       .post(jsonBodyRequired(this.options.needsPayload ?? true), (req: Request, res: Response) => {
-        this.emit('trigger', req.body); // Type this?
+        this.emit('trigger', req.body); // TODO: Type this?
         res.status(HttpStatus.OK).send(createSuccessResponse());
       })
       .all(onlySupportedMethods('POST'));

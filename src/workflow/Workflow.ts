@@ -21,7 +21,7 @@ export abstract class Workflow {
       await this.run();
       this.application.emit('workflowFinish', this);
     } catch (error) {
-      this.application.emit('workflowError', this, error);
+      this.application.emit('workflowError', this, error as Error);
     }
   }
 
