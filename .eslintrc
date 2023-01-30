@@ -26,6 +26,8 @@
     "no-console": "off",
     "new-cap": "off",
     "max-params": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-unused-vars": "off",
+    "no-redeclare": "off"
   }
 }

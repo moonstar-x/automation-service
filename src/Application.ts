@@ -1,5 +1,3 @@
-/* eslint-disable no-redeclare */
-/* eslint-disable no-unused-vars */
 import { EventEmitter } from 'events';
 import { Workflow } from './workflow/Workflow';
 import { Logger } from './utils/logging';

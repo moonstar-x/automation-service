@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Application } from '../Application';
 import { Trigger } from './Trigger';
 import { Logger } from './../utils/logging';

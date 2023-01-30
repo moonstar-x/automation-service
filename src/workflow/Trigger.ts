@@ -1,5 +1,3 @@
-/* eslint-disable no-redeclare */
-/* eslint-disable no-unused-vars */
 import { EventEmitter } from 'events';
 
 // The T generic represents the payload that comes on trigger. This generic bubbles up to WebhookTrigger and WebhookManager.
