@@ -1,4 +1,4 @@
-import type { Application } from '../Application';
+import { Application } from '../Application';
 import { Trigger } from './Trigger';
 
 export abstract class Workflow {

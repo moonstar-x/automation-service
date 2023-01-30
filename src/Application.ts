@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import type { Workflow } from './workflow/Workflow';
+import { Workflow } from './workflow/Workflow';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
 
 export interface ApplicationOptions {
