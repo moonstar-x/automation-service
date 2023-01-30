@@ -1,5 +1,6 @@
 import chalk, { Chalk } from 'chalk';
 import util from 'util';
+import { debug } from '../../config/config.json';
 
 const parseArguments = (args: unknown[]) => {
   return args.map((item) => {
@@ -27,10 +28,16 @@ export class Logger {
   }
 
   warn(...args: unknown[]): void {
-    console.info(prepareMessage(chalk.yellow, this.label, args));
+    console.warn(prepareMessage(chalk.yellow, this.label, args));
   }
 
   error(...args: unknown[]): void {
-    console.info(prepareMessage(chalk.red, this.label, args));
+    console.error(prepareMessage(chalk.red, this.label, args));
+  }
+
+  debug(...args: unknown[]): void {
+    if (debug) {
+      console.debug(prepareMessage(chalk.green, this.label, args));
+    }
   }
 }
