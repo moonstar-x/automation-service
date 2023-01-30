@@ -18,8 +18,8 @@ interface UserData {
   device: string
   ip: string
   platform: string
-  secure: 'true' | 'false'
-  relayed: 'true' | 'false'
+  secure: '1' | '0'
+  relayed: '1' | '0'
 }
 
 interface MediaData {
@@ -42,7 +42,7 @@ interface UpdateData {
 
 interface TriggerPayload {
   tracker: boolean
-  type: NotificationType
+  notificationType: NotificationType
   plexUrl: string
   server: ServerData
   stream: StreamData
@@ -106,11 +106,11 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       { name: 'Device', value: payload.stream.user.device, inline: true },
       { name: 'Platform', value: payload.stream.user.platform, inline: true },
       { name: 'IP', value: payload.stream.user.ip, inline: true },
-      { name: 'Secure', value: payload.stream.user.secure === 'true' ? '✅' : '❌', inline: true },
-      { name: 'Relayed', value: payload.stream.user.relayed === 'true' ? '✅' : '❌', inline: true }
+      { name: 'Secure', value: payload.stream.user.secure === '1' ? '✅' : '❌', inline: true },
+      { name: 'Relayed', value: payload.stream.user.relayed === '1' ? '✅' : '❌', inline: true }
     ];
 
-    if (payload.type === 'PlaybackStart') {
+    if (payload.notificationType === 'PlaybackStart') {
       return {
         embeds: [{
           ...embed,
@@ -122,7 +122,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-    if (payload.type === 'PlaybackStop') {
+    if (payload.notificationType === 'PlaybackStop') {
       return {
         embeds: [{
           ...embed,
@@ -134,7 +134,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-    if (payload.type === 'PlaybackError') {
+    if (payload.notificationType === 'PlaybackError') {
       return {
         embeds: [{
           ...embed,
@@ -146,7 +146,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-    if (payload.type === 'TranscodeChange') {
+    if (payload.notificationType === 'TranscodeChange') {
       return {
         embeds: [{
           ...embed,
@@ -158,7 +158,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-    if (payload.type === 'BufferWarning') {
+    if (payload.notificationType === 'BufferWarning') {
       return {
         embeds: [{
           ...embed,
@@ -170,7 +170,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-    if (payload.type === 'UpdateAvailable') {
+    if (payload.notificationType === 'UpdateAvailable') {
       return {
         embeds: [{
           ...embed,
@@ -185,8 +185,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       };
     }
 
-
-    if (payload.type === 'DatabaseCorruption') {
+    if (payload.notificationType === 'DatabaseCorruption') {
       return {
         embeds: [{
           ...embed,
