@@ -1,8 +1,7 @@
 import { Application } from './Application';
-import { TestWorkflow } from './workflow/impl/TestWorkflow';
-import { ErrorWorkflow } from './workflow/impl/ErrorWorkflow';
+import * as WorkflowImpl from './workflow/impl';
+import * as Triggers from './workflow/triggers';
 import { webhook_port } from '../config/config.json';
-import { CronTrigger } from './workflow/triggers/CronTrigger';
 
 const main = async () => {
   const app = new Application({
@@ -12,8 +11,9 @@ const main = async () => {
   });
 
   app.registerWorkflows([
-    new TestWorkflow(app, new CronTrigger('* * * * *')),
-    new ErrorWorkflow(app, app.webhookManager.createTrigger('error'))
+    new WorkflowImpl.TestWorkflow(app, new Triggers.CronTrigger('* * * * *')),
+    new WorkflowImpl.HandleErrorWorkflow(app, new Triggers.ApplicationEventTrigger(app, 'workflowError')),
+    new WorkflowImpl.ErrorWorkflow(app, app.webhookManager.createTrigger('error'))
   ]);
 
   app.webhookManager.start();
