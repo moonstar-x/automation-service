@@ -7,8 +7,8 @@ export interface Response {
 
 export const createErrorResponse = (error: HttpError): Response => {
   return {
-    message: error.message,
-    description: error.name
+    message: `${error.name} - ${error.message}`,
+    description: error.description
   };
 };
 
