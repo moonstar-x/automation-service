@@ -10,8 +10,9 @@ export abstract class Workflow {
     this.trigger = trigger;
   }
 
-  public async setup(): Promise<void> {
-    await this.trigger.init();
+  public setup(): void {
+    this.trigger.init();
+    this.trigger.on('trigger', () => this.execute());
   }
 
   public async execute(): Promise<void> {
