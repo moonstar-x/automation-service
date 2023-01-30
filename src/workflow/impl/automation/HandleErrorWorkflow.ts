@@ -1,9 +1,9 @@
 import util from 'util';
-import { Workflow } from '../Workflow';
-import { Application, ApplicationEvents } from './../../Application';
-import { ApplicationEventTrigger } from './../triggers/ApplicationEventTrigger';
-import { DiscordWebhookClient, EMBED_COLORS } from '../../clients/DiscordWebhookClient';
-import { discord_webhooks } from '../../../config/config.json';
+import { Workflow } from '../../Workflow';
+import { Application, ApplicationEvents } from '../../../Application';
+import { ApplicationEventTrigger } from '../../triggers/ApplicationEventTrigger';
+import { DiscordWebhookClient, EMBED_COLORS } from '../../../clients/DiscordWebhookClient';
+import { discord_webhooks } from '../../../../config/config.json';
 
 type TriggerPayload = ApplicationEvents['workflowError'];
 
