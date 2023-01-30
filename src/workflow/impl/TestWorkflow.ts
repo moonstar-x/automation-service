@@ -12,6 +12,5 @@ export class TestWorkflow extends Workflow<void> {
 
   public async run(): Promise<void> {
     console.log('Testing workflow...');
-    throw new Error('Hello.');
   }
 }

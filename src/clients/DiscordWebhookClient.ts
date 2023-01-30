@@ -1,9 +1,4 @@
 import axios from 'axios';
-
-export const EMBED_COLORS = {
-  purple: 5652156
-};
-
 export interface EmbedFooter {
   text: string
   icon_url?: string
@@ -47,6 +42,11 @@ export interface DiscordWebhookPayload {
   content?: string
   embeds?: DiscordEmbed[]
 }
+
+export const EMBED_COLORS = {
+  purple: 5652156,
+  orange: 15905382
+};
 
 export class DiscordWebhookClient {
   private webhook: string;
