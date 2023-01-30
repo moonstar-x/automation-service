@@ -5,7 +5,7 @@ import { logRequests } from '../../../express/middleware/logging';
 import { handleError } from '../../../express/middleware/error';
 import { routeNotFound } from './../../../express/middleware/route';
 import { Logger } from '../../../utils/logging';
-import { WebhookTrigger } from './WebhookTrigger';
+import { WebhookTrigger, WebhookTriggerOptions } from './WebhookTrigger';
 
 export interface WebhookManagerOptions {
   port: number
@@ -45,13 +45,13 @@ export class WebhookManager {
     });
   }
 
-  public createTrigger<T>(name: string): WebhookTrigger<T> {
-    if (this.triggers.has(name)) {
-      throw new Error(`Webhook ${name} already exists.`);
+  public createTrigger<T>(id: string, options: WebhookTriggerOptions = {}): WebhookTrigger<T> {
+    if (this.triggers.has(id)) {
+      throw new Error(`Webhook ${id} already exists.`);
     }
 
-    const trigger = new WebhookTrigger<T>({ name, app: this.app });
-    this.triggers.set(name, trigger);
+    const trigger = new WebhookTrigger<T>(this.app, id, options);
+    this.triggers.set(id, trigger);
 
     return trigger;
   }
