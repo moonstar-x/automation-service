@@ -1,6 +1,5 @@
 import { Application } from './Application';
-import * as WorkflowImpl from './workflow/impl';
-import * as Triggers from './workflow/triggers';
+import * as Workflows from './workflow/impl';
 import { webhook_port } from '../config/config.json';
 
 const main = async () => {
@@ -11,9 +10,9 @@ const main = async () => {
   });
 
   app.registerWorkflows([
-    new WorkflowImpl.TestWorkflow(app, new Triggers.CronTrigger('* * * * *')),
-    new WorkflowImpl.HandleErrorWorkflow(app, new Triggers.ApplicationEventTrigger(app, 'workflowError')),
-    new WorkflowImpl.ErrorWorkflow(app, app.webhookManager.createTrigger('error'))
+    new Workflows.TestWorkflow(app),
+    new Workflows.HandleErrorWorkflow(app),
+    new Workflows.ErrorWorkflow(app)
   ]);
 
   app.webhookManager.start();

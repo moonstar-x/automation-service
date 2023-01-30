@@ -5,8 +5,8 @@ import { ApplicationEventTrigger } from './../triggers/ApplicationEventTrigger';
 type TriggerPayload = ApplicationEvents['workflowError'];
 
 export class HandleErrorWorkflow extends Workflow<TriggerPayload> {
-  constructor(application: Application, trigger: ApplicationEventTrigger<'workflowError'>) {
-    super(application, trigger, {
+  constructor(application: Application) {
+    super(application, new ApplicationEventTrigger(application, 'workflowError'), {
       name: 'HandleErrorWorkflow',
       description: 'A workflow that notifies a Discord channel when any other workflow fails.'
     });
