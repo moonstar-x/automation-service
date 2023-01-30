@@ -1,7 +1,12 @@
 import { Workflow } from '../Workflow';
 
-export class TestWorkflow extends Workflow {
-  public async run(): Promise<void> {
+interface TriggerPayload {
+  name: string
+}
+
+export class TestWorkflow extends Workflow<TriggerPayload> {
+  public async run(payload?: TriggerPayload): Promise<void> {
+    console.log(payload);
     console.log('Testing workflow...');
   }
 }

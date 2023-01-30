@@ -10,7 +10,7 @@ export interface WebhookTriggerOptions {
   needsPayload?: boolean
 }
 
-export class WebhookTrigger extends Trigger {
+export class WebhookTrigger<T> extends Trigger<T> {
   private options: WebhookTriggerOptions;
 
   constructor(options: WebhookTriggerOptions) {
@@ -21,7 +21,7 @@ export class WebhookTrigger extends Trigger {
   public init(): void {
     this.options.app.route(`/webhooks/${this.options.name}`)
       .post(jsonBodyRequired(this.options.needsPayload ?? true), (req: Request, res: Response) => {
-        this.emit('trigger', req.body); // TODO: Type this?
+        this.emit('trigger', req.body as T);
         res.status(HttpStatus.OK).send(createSuccessResponse());
       })
       .all(onlySupportedMethods('POST'));

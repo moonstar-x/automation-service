@@ -1,7 +1,12 @@
 import { Workflow } from '../Workflow';
 
-export class ErrorWorkflow extends Workflow {
-  public async run(): Promise<void> {
+interface TriggerPayload {
+  error: string
+}
+
+export class ErrorWorkflow extends Workflow<TriggerPayload> {
+  public async run(payload?: TriggerPayload): Promise<void> {
+    console.log(payload);
     throw new Error('Oops...');
   }
 }

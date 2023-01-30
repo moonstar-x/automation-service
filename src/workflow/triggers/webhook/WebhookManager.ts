@@ -15,13 +15,13 @@ export class WebhookManager {
   private options: WebhookManagerOptions;
   private app: Express;
   private logger: Logger;
-  private triggers: Map<string, WebhookTrigger>;
+  private triggers: Map<string, WebhookTrigger<unknown>>;
 
   constructor(options: WebhookManagerOptions) {
     this.options = options;
     this.app = express();
     this.logger = new Logger('WebhookManager');
-    this.triggers = new Map<string, WebhookTrigger>();
+    this.triggers = new Map<string, WebhookTrigger<unknown>>();
     this.registerMiddleware();
   }
 
@@ -45,12 +45,12 @@ export class WebhookManager {
     });
   }
 
-  public createTrigger(name: string): WebhookTrigger {
+  public createTrigger<T>(name: string): WebhookTrigger<T> {
     if (this.triggers.has(name)) {
       throw new Error(`Webhook ${name} already exists.`);
     }
 
-    const trigger = new WebhookTrigger({ name, app: this.app });
+    const trigger = new WebhookTrigger<T>({ name, app: this.app });
     this.triggers.set(name, trigger);
 
     return trigger;
