@@ -110,7 +110,7 @@ export class LastFmClient {
   }
 
   async getProfile(user: string): Promise<LastFmUser> {
-    const response = await this.rest.get('', {
+    const response = await this.rest.get('/', {
       params: {
         ...this.baseParams,
         method: 'user.getinfo',
@@ -122,7 +122,7 @@ export class LastFmClient {
   }
 
   async getWeeklyAlbumChart(user: string): Promise<LastFmAlbumChart> {
-    const response = await this.rest.get('', {
+    const response = await this.rest.get('/', {
       params: {
         ...this.baseParams,
         method: 'user.getWeeklyAlbumChart',
@@ -134,7 +134,7 @@ export class LastFmClient {
   }
 
   async getWeeklyArtistChart(user: string): Promise<LastFmArtistChart> {
-    const response = await this.rest.get('', {
+    const response = await this.rest.get('/', {
       params: {
         ...this.baseParams,
         method: 'user.getWeeklyArtistChart',
@@ -146,7 +146,7 @@ export class LastFmClient {
   }
 
   async getWeeklyTrackChart(user: string): Promise<LastFmTrackChart> {
-    const response = await this.rest.get('', {
+    const response = await this.rest.get('/', {
       params: {
         ...this.baseParams,
         method: 'user.getWeeklyTrackChart',
