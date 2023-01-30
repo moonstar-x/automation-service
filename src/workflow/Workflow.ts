@@ -2,13 +2,20 @@
 import { Application } from '../Application';
 import { Trigger } from './Trigger';
 
+export interface WorkflowMetadata {
+  name: string
+  description: string
+}
+
 export abstract class Workflow<T> {
   private application: Application;
   private trigger: Trigger<T>;
+  private _metadata: WorkflowMetadata;
 
-  constructor(application: Application, trigger: Trigger<T>) {
+  constructor(application: Application, trigger: Trigger<T>, metadata: WorkflowMetadata) {
     this.application = application;
     this.trigger = trigger;
+    this._metadata = metadata;
   }
 
   public setup(): void {
@@ -27,4 +34,8 @@ export abstract class Workflow<T> {
   }
 
   public abstract run(payload?: T): Promise<void>
+
+  get metadata() {
+    return this._metadata;
+  }
 }
