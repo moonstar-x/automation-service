@@ -10,9 +10,8 @@ const main = async () => {
   });
 
   app.registerWorkflows([
-    new Workflows.TestWorkflow(app),
     new Workflows.HandleErrorWorkflow(app),
-    new Workflows.ErrorWorkflow(app)
+    new Workflows.TestWorkflow(app)
   ]);
 
   app.webhookManager.start();
