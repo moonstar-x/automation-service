@@ -3,7 +3,7 @@ import { Workflow } from './workflow/Workflow';
 import { Logger } from './utils/logging';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
 
-interface ApplicationEvents {
+export interface ApplicationEvents {
   workflowRegistered: [Workflow<unknown>]
   workflowStart: [Workflow<unknown>]
   workflowFinish: [Workflow<unknown>]
