@@ -43,6 +43,7 @@ export class Application extends EventEmitter {
 
   public registerWorkflow(workflow: Workflow<unknown>): void {
     workflow.setup();
+    this.emit('workflowRegistered', workflow);
   }
 
   public registerWorkflows(workflows: Workflow<unknown>[]): void {
