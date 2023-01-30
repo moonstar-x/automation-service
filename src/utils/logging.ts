@@ -12,8 +12,8 @@ const parseArguments = (args: unknown[]) => {
   });
 };
 
-const prepareMessage = (chalkStyle: Chalk, prefix: string, args: unknown[]) => {
-  return chalkStyle(`(${new Date().toLocaleTimeString()}) - ${chalk.bold(prefix)} - `, ...parseArguments(Array.prototype.slice.call(args)));
+const prepareMessage = (chalkStyle: Chalk, label: string, level: string, args: unknown[]) => {
+  return chalkStyle(`(${new Date().toUTCString()}) [${chalk.bold(`${label}/${level}`)}] -`, ...parseArguments(Array.prototype.slice.call(args)));
 };
 
 export class Logger {
@@ -24,20 +24,20 @@ export class Logger {
   }
 
   info(...args: unknown[]): void {
-    console.info(prepareMessage(chalk.cyan, this.label, args));
+    console.info(prepareMessage(chalk.cyan, this.label, 'INFO', args));
   }
 
   warn(...args: unknown[]): void {
-    console.warn(prepareMessage(chalk.yellow, this.label, args));
+    console.warn(prepareMessage(chalk.yellow, this.label, 'WARN', args));
   }
 
   error(...args: unknown[]): void {
-    console.error(prepareMessage(chalk.red, this.label, args));
+    console.error(prepareMessage(chalk.red, this.label, 'ERROR', args));
   }
 
   debug(...args: unknown[]): void {
     if (debug) {
-      console.debug(prepareMessage(chalk.green, this.label, args));
+      console.debug(prepareMessage(chalk.green, this.label, 'DEBUG', args));
     }
   }
 }

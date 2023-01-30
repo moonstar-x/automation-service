@@ -41,7 +41,7 @@ export class WebhookManager {
     this.registerLastMiddleware();
     
     this.app.listen(this.options.port, () => {
-      this.logger.info(`WebhookManager started on port ${this.options.port}`);
+      this.logger.info(`Webhook HTTP service has started on port ${this.options.port}.`);
     });
   }
 
