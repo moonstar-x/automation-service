@@ -46,11 +46,6 @@ export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
       image: {
         url: payload.posterImage
       },
-      author: {
-        name: payload.applicationName,
-        url: payload.applicationUrl,
-        icon_url: `${payload.applicationUrl}/images/favicon/apple-touch-icon.png`
-      },
       fields: [
         { name: 'Title', value: payload.title, inline: true },
         { name: 'Year', value: payload.year, inline: true },

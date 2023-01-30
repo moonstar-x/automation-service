@@ -50,7 +50,12 @@ export const EMBED_COLORS: Record<string, number> = {
 };
 
 export const DEFAULT_FOOTER: EmbedFooter = {
-  text: "This notification has been triggered by moonstar-x's automation service.",
+  text: "This notification has been triggered by moonstar-x's automation service."
+};
+
+export const DEFAULT_AUTHOR: EmbedAuthor = {
+  name: "moonstar-x's Automation Service",
+  url: 'https://github.com/moonstar-x/automation-service',
   icon_url: 'https://avatars.githubusercontent.com/u/14969195?v=4'
 };
 
@@ -70,6 +75,7 @@ export class DiscordWebhookClient {
         embeds: payload.embeds.map((embed) => ({
           ...embed,
           color: embed.color ?? EMBED_COLORS.default,
+          author: embed.author ?? DEFAULT_AUTHOR,
           footer: embed.footer ?? DEFAULT_FOOTER
         }))
       } :
