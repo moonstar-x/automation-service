@@ -1,7 +1,10 @@
 import express, { Express } from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
-import { Logger } from '../../../utils/logging';
 import { logRequests } from '../../../express/middleware/logging';
+import { handleError } from '../../../express/middleware/error';
+import { routeNotFound } from './../../../express/middleware/route';
+import { Logger } from '../../../utils/logging';
 import { WebhookTrigger } from './WebhookTrigger';
 
 export interface WebhookManagerOptions {
@@ -23,12 +26,20 @@ export class WebhookManager {
   }
 
   private registerMiddleware() {
+    this.app.use(bodyParser.json());
     this.app.use(cors());
     this.app.use(logRequests(this.logger));
     this.app.options('*', cors());
   }
 
+  private registerLastMiddleware() {
+    this.app.all('*', routeNotFound);
+    this.app.use(handleError(this.logger));
+  }
+
   public start() {
+    this.registerLastMiddleware();
+    
     this.app.listen(this.options.port, () => {
       this.logger.info(`WebhookManager started on port ${this.options.port}`);
     });
