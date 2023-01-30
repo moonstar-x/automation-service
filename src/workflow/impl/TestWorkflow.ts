@@ -6,11 +6,12 @@ export class TestWorkflow extends Workflow<void> {
   constructor(application: Application) {
     super(application, new CronTrigger('* * * * *'), {
       name: 'TestWorkflow',
-      description: 'A testing workflow.'
+      description: 'Testing workflow'
     });
   }
 
   public async run(): Promise<void> {
     console.log('Testing workflow...');
+    throw new Error('Hello.');
   }
 }
