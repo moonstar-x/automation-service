@@ -1,7 +1,9 @@
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EMBED_COLORS } from '../../../clients/DiscordWebhookClient';
+import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed } from '../../../clients/DiscordWebhookClient';
 import { discord_webhooks } from '../../../../config/config.json';
+
+const EMBED_COLOR = 15048717;
 
 type NotificationType = 'NewRequest' | 'RequestApproved' | 'RequestAvailable';
 
@@ -42,7 +44,7 @@ export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
   private createPayload(payload: TriggerPayload): DiscordWebhookPayload | null {
     const embed: DiscordEmbed = {
       url: payload.applicationUrl,
-      color: EMBED_COLORS.orange,
+      color: EMBED_COLOR,
       image: {
         url: payload.posterImage
       },

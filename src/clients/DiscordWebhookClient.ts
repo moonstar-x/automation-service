@@ -43,17 +43,10 @@ export interface DiscordWebhookPayload {
   embeds?: DiscordEmbed[]
 }
 
-export const EMBED_COLORS: Record<string, number> = {
-  purple: 5652156,
-  orange: 15905382,
-  red: 16738657,
-  default: 5652156
-};
-
+export const DEFAULT_EMBED_COLOR = 12710396;
 export const DEFAULT_FOOTER: EmbedFooter = {
   text: "This notification has been triggered by moonstar-x's automation service."
 };
-
 export const DEFAULT_AUTHOR: EmbedAuthor = {
   name: "moonstar-x's Automation Service",
   url: 'https://github.com/moonstar-x/automation-service',
@@ -75,7 +68,7 @@ export class DiscordWebhookClient {
         ...payload,
         embeds: payload.embeds.map((embed) => ({
           ...embed,
-          color: embed.color ?? EMBED_COLORS.default,
+          color: embed.color ?? DEFAULT_EMBED_COLOR,
           author: embed.author ?? DEFAULT_AUTHOR,
           footer: embed.footer ?? DEFAULT_FOOTER
         }))

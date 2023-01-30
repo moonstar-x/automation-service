@@ -1,8 +1,10 @@
 /* eslint-disable max-statements */
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EmbedAuthor, EmbedField, EMBED_COLORS } from '../../../clients/DiscordWebhookClient';
+import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EmbedAuthor, EmbedField } from '../../../clients/DiscordWebhookClient';
 import { discord_webhooks } from '../../../../config/config.json';
+
+const EMBED_COLOR = 15048717;
 
 type NotificationType = 'PlaybackStart' | 'PlaybackStop' | 'PlaybackError' | 'TranscodeChange' | 'BufferWarning' | 'UpdateAvailable' | 'DatabaseCorruption';
 
@@ -82,7 +84,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
   private createPayload(payload: TriggerPayload): DiscordWebhookPayload | null {
     const embed: DiscordEmbed = {
       url: payload.plexUrl,
-      color: EMBED_COLORS.orange,
+      color: EMBED_COLOR,
       footer: {
         text: `${payload.server.name} on ${payload.server.platform} - v${payload.server.version}`
       }

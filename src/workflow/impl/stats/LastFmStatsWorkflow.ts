@@ -3,9 +3,10 @@ import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import { LastFmClient, LastFmUser, LastFmAlbum, LastFmArtist, LastFmTrack } from '../../../clients/LastFmClient';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EMBED_COLORS } from '../../../clients/DiscordWebhookClient';
+import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed } from '../../../clients/DiscordWebhookClient';
 import { last_fm, discord_webhooks } from '../../../../config/config.json';
 
+const EMBED_COLOR = 13963271;
 const MAX_ITEMS = 10;
 
 export class LastFmStatsWorkflow extends Workflow<void> {
@@ -29,7 +30,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     const tracks = (await this.lastFmClient.getWeeklyTrackChart(last_fm.user)).track;
 
     const baseEmbed: DiscordEmbed = {
-      color: EMBED_COLORS.red,
+      color: EMBED_COLOR,
       author: {
         name: 'Music Listening Stats for moonstar-x',
         url: 'https://www.last.fm/user/moonstar-x',
