@@ -10,7 +10,7 @@ export interface WorkflowMetadata {
 export abstract class Workflow<T> {
   private application: Application;
   private trigger: Trigger<T>;
-  private logger: Logger;
+  protected logger: Logger;
   private _metadata: WorkflowMetadata;
 
   constructor(application: Application, trigger: Trigger<T>, metadata: WorkflowMetadata) {
