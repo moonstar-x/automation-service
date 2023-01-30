@@ -46,6 +46,7 @@ export interface DiscordWebhookPayload {
 export const EMBED_COLORS: Record<string, number> = {
   purple: 5652156,
   orange: 15905382,
+  red: 16738657,
   default: 5652156
 };
 

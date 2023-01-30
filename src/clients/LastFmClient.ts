@@ -4,7 +4,7 @@ const API_URL = 'https://ws.audioscrobbler.com/2.0';
 
 export interface LastFmImage {
   size: 'small' | 'medium' | 'large' | 'extralarge'
-  '#test': string
+  '#text': string
 }
 
 export interface LastFmUser {
@@ -32,7 +32,7 @@ export interface LastFmUser {
 export interface LastFmAlbum {
   artist: {
     mbid: string
-    '#test': string
+    '#text': string
   },
   mbid: string
   url: string
@@ -74,7 +74,7 @@ export interface LastFmArtistChart {
 export interface LastFmTrack {
   artist: {
     mbid: string
-    '#test': string
+    '#text': string
   },
   image: LastFmImage[]
   mbid: string
