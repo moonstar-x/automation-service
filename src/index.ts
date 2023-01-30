@@ -1,11 +1,12 @@
 import { Application } from './Application';
 import { TestWorkflow } from './workflow/impl/TestWorkflow';
 import { ErrorWorkflow } from './workflow/impl/ErrorWorkflow';
+import { webhook_port } from '../config/config.json';
 
 const main = async () => {
   const app = new Application({
     webhookManager: {
-      port: 4000
+      port: webhook_port
     }
   });
 

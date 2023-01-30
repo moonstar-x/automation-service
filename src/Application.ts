@@ -25,13 +25,15 @@ export interface ApplicationOptions {
 }
 
 export class Application extends EventEmitter {
-  private _webhookManager: WebhookManager;
+  private workflows: Map<string, Workflow<unknown>>;
   private logger: Logger;
+  private _webhookManager: WebhookManager;
 
   constructor(options: ApplicationOptions) {
     super();
-    this._webhookManager = new WebhookManager(options.webhookManager);
+    this.workflows = new Map<string, Workflow<unknown>>();
     this.logger = new Logger('Application');
+    this._webhookManager = new WebhookManager(options.webhookManager);
     this.registerEvents();
   }
 
@@ -42,7 +44,12 @@ export class Application extends EventEmitter {
   }
 
   public registerWorkflow(workflow: Workflow<unknown>): void {
+    if (this.workflows.has(workflow.metadata.name)) {
+      throw new Error(`Workflow ${workflow.metadata.name} has already been registered.`);
+    }
+
     workflow.setup();
+    this.workflows.set(workflow.metadata.name, workflow);
     this.emit('workflowRegistered', workflow);
   }
 
