@@ -27,16 +27,16 @@ export abstract class Workflow<T> {
 
   public async execute(payload?: T): Promise<void> {
     try {
-      this.logger.debug(`Workflow ${this._metadata.name} has been triggered with the following payload:`, payload);
-      this.logger.info(`Workflow ${this._metadata.name} is running...`);
+      this.logger.debug('Workflow has been triggered with the following payload:', payload);
+      this.logger.info('Workflow is now running...');
       this.application.emit('workflowStart', this);
 
       await this.run(payload);
       
-      this.logger.info(`Workflow ${this._metadata.name} has finished running.`);
+      this.logger.info('Workflow has finished running.');
       this.application.emit('workflowFinish', this);
     } catch (error) {
-      this.logger.error(`Workflow ${this._metadata.name} has run into an error.`, error);
+      this.logger.error('An error has occurred when running the workflow.', error);
       this.application.emit('workflowError', this, error as Error);
     }
   }
