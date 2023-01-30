@@ -43,9 +43,15 @@ export interface DiscordWebhookPayload {
   embeds?: DiscordEmbed[]
 }
 
-export const EMBED_COLORS = {
+export const EMBED_COLORS: Record<string, number> = {
   purple: 5652156,
-  orange: 15905382
+  orange: 15905382,
+  default: 5652156
+};
+
+export const DEFAULT_FOOTER: EmbedFooter = {
+  text: "This notification has been triggered by moonstar-x's automation service.",
+  icon_url: 'https://avatars.githubusercontent.com/u/14969195?v=4'
 };
 
 export class DiscordWebhookClient {
@@ -57,7 +63,19 @@ export class DiscordWebhookClient {
 
   public async send(payload: DiscordWebhookPayload): Promise<void> {
     this.validatePayload(payload);
-    await axios.post(this.webhook, payload);
+
+    const completePayload: DiscordWebhookPayload = payload.embeds ?
+      {
+        ...payload,
+        embeds: payload.embeds.map((embed) => ({
+          ...embed,
+          color: embed.color ?? EMBED_COLORS.default,
+          footer: embed.footer ?? DEFAULT_FOOTER
+        }))
+      } :
+      payload;
+
+    await axios.post(this.webhook, completePayload);
   }
 
   private validatePayload(payload: DiscordWebhookPayload) {
