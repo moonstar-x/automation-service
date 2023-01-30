@@ -8,7 +8,7 @@ const parseArguments = (args: unknown[]) => {
       return item;
     }
 
-    return util.inspect(item, { colors: false, depth: null });
+    return util.inspect(item, { colors: false, depth: 2 });
   });
 };
 
