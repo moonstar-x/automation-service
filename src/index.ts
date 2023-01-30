@@ -11,6 +11,9 @@ const main = async () => {
 
   app.registerWorkflows([
     new Workflows.HandleErrorWorkflow(app),
+
+    new Workflows.OmbiRequestsWorkflow(app),
+    
     new Workflows.TestWorkflow(app)
   ]);
 
