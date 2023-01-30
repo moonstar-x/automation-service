@@ -3,7 +3,7 @@ import { Application } from '../../../Application';
 import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EMBED_COLORS } from '../../../clients/DiscordWebhookClient';
 import { discord_webhooks } from '../../../../config/config.json';
 
-type NotificationType = 'NewRequest' | 'RequestApproved' | 'RequestAvailable'
+type NotificationType = 'NewRequest' | 'RequestApproved' | 'RequestAvailable';
 
 interface TriggerPayload {
   requestedUser: string,

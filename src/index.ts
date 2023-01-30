@@ -13,6 +13,7 @@ const main = async () => {
     new Workflows.HandleErrorWorkflow(app),
 
     new Workflows.OmbiRequestsWorkflow(app),
+    new Workflows.TautulliNotificationsWorkflow(app),
     
     new Workflows.TestWorkflow(app)
   ]);
