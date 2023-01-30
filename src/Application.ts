@@ -5,9 +5,9 @@ import { Workflow } from './workflow/Workflow';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
 
 interface ApplicationEvents {
-  workflowStart: [Workflow]
-  workflowFinish: [Workflow]
-  workflowError: [Workflow, Error]
+  workflowStart: [Workflow<any>]
+  workflowFinish: [Workflow<any>]
+  workflowError: [Workflow<any>, Error]
 }
 
 export declare interface Application {
@@ -37,11 +37,11 @@ export class Application extends EventEmitter {
     this.on('workflowError', () => console.log('error'));
   }
 
-  public registerWorkflow(workflow: Workflow): void {
+  public registerWorkflow(workflow: Workflow<any>): void {
     workflow.setup();
   }
 
-  public registerWorkflows(workflows: Workflow[]): void {
+  public registerWorkflows(workflows: Workflow<any>[]): void {
     workflows.map((workflow) => this.registerWorkflow(workflow));
   }
 
