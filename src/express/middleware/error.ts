@@ -9,6 +9,8 @@ export const handleError = (logger: Logger) => (error: Error, _: Request, res: R
 
   if (httpError.statusCode === HttpStatus.INTERNAL_SERVER_ERROR) {
     logger.error(error);
+  } else {
+    logger.warn(error);
   }
 
   res.status(httpError.statusCode).send(createErrorResponse(httpError));
