@@ -2,13 +2,12 @@
   "name": "automation-service",
   "version": "1.0.0",
   "description": "A custom automation service to handle some notifications I need.",
-  "main": "./build/index.js",
+  "main": "./build/src/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
-    "build": "tsc --build",
-    "start": "node ./build/index.js"
+    "build": "tsc --build --clean"
   },
   "engines": {
     "node": ">=16"
