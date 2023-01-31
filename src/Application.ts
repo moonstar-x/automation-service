@@ -26,13 +26,13 @@ export interface ApplicationOptions {
 export class Application extends EventEmitter {
   private workflows: Map<string, Workflow<unknown>>;
   private logger: Logger;
-  private _webhookManager: WebhookManager;
+  public readonly webhookManager: WebhookManager;
 
   constructor(options: ApplicationOptions) {
     super();
     this.workflows = new Map<string, Workflow<unknown>>();
     this.logger = new Logger('Application');
-    this._webhookManager = new WebhookManager(options.webhookManager);
+    this.webhookManager = new WebhookManager(options.webhookManager);
     this.registerEvents();
   }
 
@@ -72,9 +72,5 @@ export class Application extends EventEmitter {
     }))).flat(1);
 
     this.registerWorkflows(workflows);
-  }
-
-  get webhookManager() {
-    return this._webhookManager;
   }
 }

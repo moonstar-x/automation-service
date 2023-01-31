@@ -11,12 +11,12 @@ export abstract class Workflow<T> {
   private application: Application;
   private trigger: Trigger<T>;
   protected logger: Logger;
-  private _metadata: WorkflowMetadata;
+  public readonly metadata: WorkflowMetadata;
 
   constructor(application: Application, trigger: Trigger<T>, metadata: WorkflowMetadata) {
     this.application = application;
     this.trigger = trigger;
-    this._metadata = metadata;
+    this.metadata = metadata;
     this.logger = new Logger(metadata.name);
   }
 
@@ -42,8 +42,4 @@ export abstract class Workflow<T> {
   }
 
   public abstract run(payload?: T): Promise<void>
-
-  get metadata() {
-    return this._metadata;
-  }
 }

@@ -12,13 +12,13 @@ export interface WebhookTriggerOptions {
 
 export class WebhookTrigger<T> extends Trigger<T> {
   private app: Express;
-  private _id: string;
+  public readonly id: string;
   private options: Required<WebhookTriggerOptions>;
 
   constructor(app: Express, id: string, options: WebhookTriggerOptions) {
     super();
     this.app = app;
-    this._id = id;
+    this.id = id;
     
     this.options = {
       needsPayload: options.needsPayload ?? true,
@@ -27,15 +27,11 @@ export class WebhookTrigger<T> extends Trigger<T> {
   }
 
   public init(): void {
-    this.app.route(`/webhooks/${this._id}`)
+    this.app.route(`/webhooks/${this.id}`)
       .post(verifySecret(this.options.needsSecret), jsonBodyRequired(this.options.needsPayload), (req: Request, res: Response) => {
         this.emit('trigger', req.body as T);
         res.status(HttpStatus.OK).send(createSuccessResponse());
       })
       .all(onlySupportedMethods('POST'));
-  }
-
-  get id() {
-    return this._id;
   }
 }
