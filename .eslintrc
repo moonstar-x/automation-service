@@ -28,6 +28,7 @@
     "max-params": "off",
     "camelcase": "off",
     "no-unused-vars": "off",
-    "no-redeclare": "off"
+    "no-redeclare": "off",
+    "no-undefined": "off"
   }
 }
