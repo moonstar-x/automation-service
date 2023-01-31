@@ -6,6 +6,7 @@ import { DiscordWebhookClient } from '../../../clients/DiscordWebhookClient';
 import { discord_webhooks } from '../../../../config/config.json';
 
 const EMBED_COLOR = 16731212;
+const MAX_ERROR_STACK_SIZE = 1000;
 
 type TriggerPayload = ApplicationEvents['workflowError'];
 
@@ -26,6 +27,9 @@ export class HandleErrorWorkflow extends Workflow<TriggerPayload> {
       return; // Avoid an infinite loop.
     }
 
+    const errorStackString = util.format(error);
+    const errorStackText = errorStackString.length < MAX_ERROR_STACK_SIZE ? errorStackString : `${errorStackString.slice(0, MAX_ERROR_STACK_SIZE)} [...]`;
+
     await this.discordWebhookClient.send({
       embeds: [{
         title: `[${workflow.metadata.name}]: An error has occurred on workflow execution.`,
@@ -33,7 +37,7 @@ export class HandleErrorWorkflow extends Workflow<TriggerPayload> {
         color: EMBED_COLOR,
         fields: [{
           name: 'Error Stack',
-          value: `\`\`\`${util.format(error)}\`\`\``
+          value: `\`\`\`${errorStackText}\`\`\``
         }]
       }]
     });
