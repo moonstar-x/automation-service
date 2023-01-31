@@ -1,10 +1,10 @@
 import { Workflow } from '../Workflow';
 import { Application } from './../../Application';
-import { CronTrigger } from './../triggers/CronTrigger';
+import { TimeoutTrigger } from './../triggers/TimeoutTrigger';
 
 export class TestWorkflow extends Workflow<void> {
   constructor(application: Application) {
-    super(application, new CronTrigger('* * * * *'), {
+    super(application, new TimeoutTrigger(5), {
       name: 'TestWorkflow',
       description: 'Testing stuff'
     });
