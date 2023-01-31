@@ -17,3 +17,7 @@ export declare interface Trigger<T> {
 export abstract class Trigger<T> extends EventEmitter {
   public abstract init(): void
 }
+
+export interface Clearable {
+  clear(): void
+}
