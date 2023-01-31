@@ -1,5 +1,5 @@
+import path from 'path';
 import { Application } from './Application';
-import * as Workflows from './workflow/impl';
 import { webhook_port } from '../config/config.json';
 
 const main = async () => {
@@ -9,18 +9,7 @@ const main = async () => {
     }
   });
 
-  app.registerWorkflows([
-    new Workflows.HandleErrorWorkflow(app),
-
-    new Workflows.OmbiRequestsWorkflow(app),
-    new Workflows.TautulliNotificationsWorkflow(app),
-
-    new Workflows.LastFmStatsWorkflow(app),
-    new Workflows.NpmStatsWorkflow(app),
-    new Workflows.WakaTimeStatsWorkflow(app),
-
-    new Workflows.TestWorkflow(app)
-  ]);
+  await app.registerWorkflowsIn(path.join(__dirname, './workflow/impl'));
 
   app.webhookManager.start();
 };

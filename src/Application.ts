@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import { Workflow } from './workflow/Workflow';
 import { Logger } from './utils/logging';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
+import { getAllFilesRecursive } from './utils/filesystem';
 
 export interface ApplicationEvents {
   workflowRegistered: [Workflow<unknown>]
@@ -53,6 +54,24 @@ export class Application extends EventEmitter {
 
   public registerWorkflows(workflows: Workflow<unknown>[]): void {
     workflows.map((workflow) => this.registerWorkflow(workflow));
+  }
+
+  public async registerWorkflowsIn(absoluteDirectory: string): Promise<void> {
+    const files = getAllFilesRecursive(absoluteDirectory).filter((file) => file.match(/(\.ts)|(\.js)$/));
+
+    const workflows: Workflow<unknown>[] = (await Promise.all(files.map(async (file) => {
+      const imported: Record<string, ObjectConstructor> = await import(file);
+
+      return Object.values(imported)
+        .filter((ImportedConstructor: ObjectConstructor) => {
+          return ImportedConstructor.prototype instanceof Workflow;
+        })
+        .map((ImportedWorkflow: ObjectConstructor) => {
+          return new ImportedWorkflow(this) as Workflow<unknown>;
+        });
+    }))).flat(1);
+
+    this.registerWorkflows(workflows);
   }
 
   get webhookManager() {
