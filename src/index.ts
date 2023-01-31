@@ -17,7 +17,9 @@ const main = async () => {
 
     new Workflows.LastFmStatsWorkflow(app),
     new Workflows.NpmStatsWorkflow(app),
-    new Workflows.WakaTimeStatsWorkflow(app)
+    new Workflows.WakaTimeStatsWorkflow(app),
+
+    new Workflows.TestWorkflow(app)
   ]);
 
   app.webhookManager.start();

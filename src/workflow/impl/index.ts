@@ -4,3 +4,5 @@ export { TautulliNotificationsWorkflow } from './media/TautulliNotificationsWork
 export { LastFmStatsWorkflow } from './stats/LastFmStatsWorkflow';
 export { NpmStatsWorkflow } from './stats/NpmStatsWorkflow';
 export { WakaTimeStatsWorkflow } from './stats/WakaTimeStatsWorkflow';
+
+export { TestWorkflow } from './TestWorkflow';
