@@ -15,7 +15,8 @@ const main = async () => {
     new Workflows.OmbiRequestsWorkflow(app),
     new Workflows.TautulliNotificationsWorkflow(app),
 
-    new Workflows.LastFmStatsWorkflow(app)
+    new Workflows.LastFmStatsWorkflow(app),
+    new Workflows.NpmStatsWorkflow(app)
   ]);
 
   app.webhookManager.start();
