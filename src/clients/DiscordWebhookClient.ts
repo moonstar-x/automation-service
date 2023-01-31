@@ -68,9 +68,9 @@ export class DiscordWebhookClient {
         ...payload,
         embeds: payload.embeds.map((embed) => ({
           ...embed,
-          color: embed.color ?? DEFAULT_EMBED_COLOR,
-          author: embed.author ?? DEFAULT_AUTHOR,
-          footer: embed.footer ?? DEFAULT_FOOTER
+          color: embed.hasOwnProperty('color') ? embed.color : DEFAULT_EMBED_COLOR,
+          author: embed.hasOwnProperty('author') ? embed.author : DEFAULT_AUTHOR,
+          footer: embed.hasOwnProperty('footer') ? embed.footer : DEFAULT_FOOTER
         }))
       } :
       payload;
