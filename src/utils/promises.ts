@@ -19,10 +19,13 @@ export const batchPromises = <T>(promises: PromiseFunction<T>[], options: BatchP
       const batches = splitArrayByCount(promises, options.batch);
       let result: T[] = [];
 
-      for (const batch of batches) {
-        const batchResult = await Promise.all(batch.map((fn) => fn()));
-        await sleep(options.interval);
-        result = result.concat(batchResult);
+      for (let i = 0; i < batches.length; i++) {
+        const batch = batches[i];
+        result = result.concat(await Promise.all(batch.map((fn) => fn())));
+
+        if (i < batches.length - 1) {
+          await sleep(options.interval);
+        }
       }
 
       resolve(result);
