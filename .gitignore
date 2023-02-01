@@ -108,3 +108,6 @@ build
 
 # Config
 config/config.json
+
+# Data
+data

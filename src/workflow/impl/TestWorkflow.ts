@@ -1,6 +1,7 @@
 import { Workflow } from '../Workflow';
 import { Application } from './../../Application';
 import { TimeoutTrigger } from './../triggers/TimeoutTrigger';
+import { levelDatabaseService } from './../../services/LevelDatabaseService';
 
 export class TestWorkflow extends Workflow<void> {
   constructor(application: Application) {
@@ -11,6 +12,6 @@ export class TestWorkflow extends Workflow<void> {
   }
 
   public async run(): Promise<void> {
-    this.logger.info('');
+    await levelDatabaseService.get('test');
   }
 }

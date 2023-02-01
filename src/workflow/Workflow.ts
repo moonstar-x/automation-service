@@ -8,8 +8,8 @@ export interface WorkflowMetadata {
 }
 
 export abstract class Workflow<T> {
-  private application: Application;
-  private trigger: Trigger<T>;
+  protected application: Application;
+  protected trigger: Trigger<T>;
   protected logger: Logger;
   public readonly metadata: WorkflowMetadata;
 
