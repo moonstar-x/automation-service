@@ -1,6 +1,7 @@
 import { Application } from '../Application';
 import { Trigger } from './Trigger';
 import { Logger } from './../utils/logging';
+import { createExecutionTimer } from '../utils/time';
 
 export interface WorkflowMetadata {
   name: string
@@ -31,9 +32,11 @@ export abstract class Workflow<T> {
       this.logger.info('Workflow is now running...');
       this.application.emit('workflowStart', this);
 
+      const timer = createExecutionTimer();
       await this.run(payload);
+      const executionDuration = timer();
       
-      this.logger.info('Workflow has finished running.');
+      this.logger.info(`Workflow has finished running. (Execution took ${executionDuration.formattedDuration})`);
       this.application.emit('workflowFinish', this);
     } catch (error) {
       this.logger.error('An error has occurred when running the workflow.', error);
