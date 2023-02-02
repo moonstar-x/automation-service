@@ -1,11 +1,11 @@
 import { Workflow } from '../Workflow';
 import { Application } from './../../Application';
 import { TimeoutTrigger } from './../triggers/TimeoutTrigger';
-import { PlausibleClient } from '../../clients/PlausibleClient';
-import { plausible } from '../../../config/config.json';
+import * as GitHub from '../../clients/github';
+import { github } from '../../../config/config.json';
 
 export class TestWorkflow extends Workflow<void> {
-  private plausibleClient: PlausibleClient;
+  private githubClient: GitHub.Client;
 
   constructor(application: Application) {
     super(application, new TimeoutTrigger(5), {
@@ -13,10 +13,10 @@ export class TestWorkflow extends Workflow<void> {
       description: 'Testing stuff'
     });
 
-    this.plausibleClient = new PlausibleClient(plausible.base_url, plausible.api_key);
+    this.githubClient = new GitHub.Client(github.token);
   }
 
   public async run(): Promise<void> {
-    console.log(JSON.stringify(await this.plausibleClient.getWeeklyAggregateStats('moonstar-x.dev'), null, 2));
+    console.log(await this.githubClient.getWeeklyPageViewsForRepo('moonstar-x/discord-tts-bot'));
   }
 }

@@ -1,8 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
-
-const API_URL = 'https://api.github.com';
-
-export interface GitHubRepoData {
+export interface RepoData {
   id: number
   node_id: string
   name: string
@@ -138,86 +134,37 @@ export interface GitHubRepoData {
   subscribers_count: number
 }
 
-export interface GitHubRepoCommitCount {
+export interface RepoCommitCount {
   all: number[]
   owner: number[]
 }
 
-export interface GitHubRepoReferrerSource {
+export interface RepoReferrerSource {
   referrer: string
   count: number
   uniques: number
 }
 
-export interface GitHubRepoClone {
+export interface RepoClone {
   timestamp: string
   count: number
   uniques: number
 }
 
-export interface GitHubRepoClones {
+export interface RepoClones {
   count: number
   uniques: number
-  clones: GitHubRepoClone[]
+  clones: RepoClone[]
 }
 
-export interface GitHubRepoPageView {
+export interface RepoPageView {
   timestamp: string
   count: number
   uniques: number
 }
 
-export interface GitHubRepoPageViews {
+export interface RepoPageViews {
   count: number
   uniques: number
-  views: GitHubRepoClone[]
-}
-
-export class GitHubClient {
-  private rest: AxiosInstance;
-
-  constructor(token: string) {
-    this.rest = axios.create({
-      baseURL: API_URL,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/vnd.github.v3+json'
-      }
-    });
-  }
-
-  public async getRepoData(repo: string): Promise<GitHubRepoData> {
-    const response = await this.rest.get(`/repos/${repo}`);
-    return response.data;
-  }
-
-  public async getWeeklyCommitCountForRepo(repo: string): Promise<GitHubRepoCommitCount> {
-    const response = await this.rest.get(`/repos/${repo}/stats/participation`);
-    return response.data;
-  }
-
-  public async getTopReferralSourcesForRepo(repo: string): Promise<GitHubRepoReferrerSource[]> {
-    const response = await this.rest.get(`/repos/${repo}/traffic/popular/referrers`);
-    return response.data;
-  }
-
-  public async getWeeklyClonesForRepo(repo: string): Promise<GitHubRepoClones> {
-    const response = await this.rest.get(`/repos/${repo}/traffic/clones`, {
-      params: {
-        per: 'week'
-      }
-    });
-
-    return response.data;
-  }
-
-  public async getWeeklyPageViewsForRepo(repo: string): Promise<GitHubRepoPageViews> {
-    const response = await this.rest.get(`/repos/${repo}/traffic/views`, {
-      params: {
-        per: 'week'
-      }
-    });
-
-    return response.data;
-  }
+  views: RepoPageView[]
 }
