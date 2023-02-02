@@ -1,11 +1,10 @@
 import { Workflow } from '../Workflow';
 import { Application } from './../../Application';
 import { TimeoutTrigger } from './../triggers/TimeoutTrigger';
-import * as GitHub from '../../clients/github';
-import { github } from '../../../config/config.json';
+import * as DockerHub from '../../clients/dockerhub';
 
 export class TestWorkflow extends Workflow<void> {
-  private githubClient: GitHub.Client;
+  private dockerHubClient: DockerHub.Client;
 
   constructor(application: Application) {
     super(application, new TimeoutTrigger(5), {
@@ -13,10 +12,10 @@ export class TestWorkflow extends Workflow<void> {
       description: 'Testing stuff'
     });
 
-    this.githubClient = new GitHub.Client(github.token);
+    this.dockerHubClient = new DockerHub.Client();
   }
 
   public async run(): Promise<void> {
-    console.log(await this.githubClient.getWeeklyPageViewsForRepo('moonstar-x/discord-tts-bot'));
+    console.log(await this.dockerHubClient.getRepoData('moonstarx', 'discord-tts-bot'));
   }
 }
