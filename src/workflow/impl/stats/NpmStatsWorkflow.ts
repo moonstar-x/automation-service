@@ -2,14 +2,14 @@
 import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
-import { NpmClient, NpmPackageDownloads, NpmsPackageInfo } from '../../../clients/NpmClient';
+import * as Npm from '../../../clients/npm';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks, npm_packages } from '../../../../config/config.json';
 
 const EMBED_COLOR = 14777974;
 
 export class NpmStatsWorkflow extends Workflow<void> {
-  private npmClient: NpmClient;
+  private npmClient: Npm.Client;
   private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
@@ -18,7 +18,7 @@ export class NpmStatsWorkflow extends Workflow<void> {
       description: 'Send weekly NPM package stats on Discord'
     });
 
-    this.npmClient = new NpmClient();
+    this.npmClient = new Npm.Client();
     this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.npm_stats);
   }
 
@@ -28,14 +28,14 @@ export class NpmStatsWorkflow extends Workflow<void> {
     const downloadsByPackage = packagesDownloads.reduce((acc, download) => {
       acc[download.package] = download;
       return acc;
-    }, {} as Record<string, NpmPackageDownloads>);
+    }, {} as Record<string, Npm.Types.NpmPackageDownloads>);
 
     return this.discordWebhookClient.send(this.createPayload(packagesInfo, downloadsByPackage));
   }
 
-  private createPayload(packagesInfo: Record<string, NpmsPackageInfo>, downloadsByPackage: Record<string, NpmPackageDownloads>): DiscordWebhook.Types.WebhookPayload {
+  private createPayload(packagesInfo: Record<string, Npm.Types.PackageInfo>, downloadsByPackage: Record<string, Npm.Types.NpmPackageDownloads>): DiscordWebhook.Types.WebhookPayload {
     const fields: DiscordWebhook.Types.EmbedField[] = Object.entries(packagesInfo).map(([pkg, info]) => {
-      const downloads: NpmPackageDownloads = downloadsByPackage[pkg];
+      const downloads: Npm.Types.NpmPackageDownloads = downloadsByPackage[pkg];
 
       const overallScore = `${Math.floor(info.score.final * 100)}%`;
       const qualityScore = `${Math.floor(info.score.detail.quality * 100)}%`;

@@ -1,14 +1,9 @@
-import axios, { AxiosInstance } from 'axios';
-
-const NPMS_API_URL = 'https://api.npms.io/v2';
-const NPM_API_URL = 'https://api.npmjs.org';
-
 export interface NpmUser {
   username: string
   email: string
 }
 
-export interface NpmsPackageMetadata {
+export interface PackageMetadata {
   name: string
   scope: string | 'unscoped'
   version: string
@@ -38,7 +33,7 @@ export interface NpmsPackageMetadata {
   hasSelectiveFiles: boolean
 }
 
-export interface NpmsPackageNpmData {
+export interface PackageNpmData {
   downloads: {
     from: string
     to: string
@@ -47,7 +42,7 @@ export interface NpmsPackageNpmData {
   starsCount: number
 }
 
-export interface NpmsPackageGitHubData {
+export interface PackageGitHubData {
   homepage: string
   starsCount: number
   forksCount: number
@@ -73,7 +68,7 @@ export interface NpmsPackageGitHubData {
   }[]
 }
 
-export interface NpmsPackageSourceData {
+export interface PackageSourceData {
   files: {
     readmeSize: number
     testsSize: number
@@ -97,7 +92,7 @@ export interface NpmsPackageSourceData {
   coverage: number
 }
 
-export interface NpmsPackageEvaluation {
+export interface PackageEvaluation {
   quality: {
     carefulness: number
     tests: number
@@ -118,7 +113,7 @@ export interface NpmsPackageEvaluation {
   }
 }
 
-export interface NpmsPackageScore {
+export interface PackageScore {
   final: number
   detail: {
     quality: number
@@ -127,16 +122,16 @@ export interface NpmsPackageScore {
   }
 }
 
-export interface NpmsPackageInfo {
+export interface PackageInfo {
   analyzedAt: string
   collected: {
-    metadata: NpmsPackageMetadata
-    npm: NpmsPackageNpmData
-    github: NpmsPackageGitHubData
-    source: NpmsPackageSourceData
+    metadata: PackageMetadata
+    npm: PackageNpmData
+    github: PackageGitHubData
+    source: PackageSourceData
   },
-  evaluation: NpmsPackageEvaluation
-  score: NpmsPackageScore
+  evaluation: PackageEvaluation
+  score: PackageScore
 }
 
 export type NpmDownloadPeriod = 'last-day' | 'last-week' | 'last-month' | 'last-year';
@@ -146,33 +141,4 @@ export type NpmPackageDownloads = {
   start: string
   end: string
   package: string
-}
-
-export class NpmClient {
-  private npmsRest: AxiosInstance;
-  private npmRest: AxiosInstance;
-
-  constructor() {
-    this.npmsRest = axios.create({
-      baseURL: NPMS_API_URL
-    });
-    this.npmRest = axios.create({
-      baseURL: NPM_API_URL
-    });
-  }
-
-  public async getPackageInfo(pkg: string): Promise<NpmsPackageInfo> {
-    const response = await this.npmsRest.get(`/package/${pkg}`);
-    return response.data;
-  }
-
-  public async getMultiplePackagesInfo(pkgs: string[]): Promise<Record<string, NpmsPackageInfo>> {
-    const response = await this.npmsRest.post('/package/mget', pkgs);
-    return response.data;
-  }
-
-  public async getDownloadsInPeriodForPackage(pkg: string, period: NpmDownloadPeriod): Promise<NpmPackageDownloads> {
-    const response = await this.npmRest.get(`/downloads/point/${period}/${pkg}`);
-    return response.data;
-  }
 }
