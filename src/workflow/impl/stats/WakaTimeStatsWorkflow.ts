@@ -1,14 +1,14 @@
 import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
-import { WakaTimeClient, WakaTimeStats, WakaTimeEntry } from '../../../clients/WakaTimeClient';
+import * as WakaTime from '../../../clients/wakatime';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks, wakatime } from '../../../../config/config.json';
 
 const EMBED_COLOR = 9093342;
 
 export class WakaTimeStatsWorkflow extends Workflow<void> {
-  private wakaTimeClient: WakaTimeClient;
+  private wakaTimeClient: WakaTime.Client;
   private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
@@ -17,7 +17,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
       description: 'Send weekly WakaTime coding stats on Discord'
     });
 
-    this.wakaTimeClient = new WakaTimeClient(wakatime.api_key);
+    this.wakaTimeClient = new WakaTime.Client(wakatime.api_key);
     this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.wakatime_stats);
   }
 
@@ -52,7 +52,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private createStatsPayload(stats: WakaTimeStats): DiscordWebhook.Types.WebhookPayload {
+  private createStatsPayload(stats: WakaTime.Types.Stats): DiscordWebhook.Types.WebhookPayload {
     return {
       embeds: [
         {
@@ -66,8 +66,8 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
           fields: [
             { name: 'Total time this week:', value: `**${stats.human_readable_total}**`, inline: true },
             { name: 'Daily average:', value: `**${stats.human_readable_daily_average}**`, inline: true },
-            { name: 'Best day:', value: `**${stats.best_day.date}**`, inline: true },
-            { name: 'Coding time in best day:', value: `**${stats.best_day.text}**`, inline: true }
+            { name: 'Best day:', value: `**${stats.best_day!.date}**`, inline: true },
+            { name: 'Coding time in best day:', value: `**${stats.best_day!.text}**`, inline: true }
           ],
           image: {
             url: wakatime.images.overall_activity
@@ -107,7 +107,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private parseTimeEntries(entries: WakaTimeEntry[]): string {
+  private parseTimeEntries(entries: WakaTime.Types.TimeEntry[]): string {
     return entries.sort((a, b) => b.total_seconds - a.total_seconds)
       .reduce((text, item) => {
         return text.concat(`• **${item.name}** for **${item.text}**.\n`);
