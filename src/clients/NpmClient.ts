@@ -47,7 +47,7 @@ export interface NpmsPackageNpmData {
   starsCount: number
 }
 
-export interface NpmsPackageGithubData {
+export interface NpmsPackageGitHubData {
   homepage: string
   starsCount: number
   forksCount: number
@@ -132,7 +132,7 @@ export interface NpmsPackageInfo {
   collected: {
     metadata: NpmsPackageMetadata
     npm: NpmsPackageNpmData
-    github: NpmsPackageGithubData
+    github: NpmsPackageGitHubData
     source: NpmsPackageSourceData
   },
   evaluation: NpmsPackageEvaluation
