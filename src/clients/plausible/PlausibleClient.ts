@@ -1,31 +1,5 @@
-/* eslint-disable max-len */
 import axios, { AxiosInstance } from 'axios';
-
-const ALL_METRICS = ['visitors', 'pageviews', 'bounce_rate', 'visit_duration', 'events', 'visits'] as const;
-
-export type PlausibleMetricKey = typeof ALL_METRICS[number];
-
-export interface PlausibleMetricValue {
-  value: number
-  change: number
-}
-
-export type PlausibleStats = {
-  [k in PlausibleMetricKey]: PlausibleMetricValue;
-};
-
-export type PlausibleBreakdown<P extends string> = {
-  [k in PlausibleMetricKey]: number | null
-} & {
-  [k in P]: string
-}
-
-export interface PlausibleFullBreakdown {
-  top_pages: PlausibleBreakdown<'page'>[]
-  top_sources: PlausibleBreakdown<'source'>[]
-  top_countries: PlausibleBreakdown<'country'>[]
-  top_devices: PlausibleBreakdown<'device'>[]
-}
+import * as Types from './types';
 
 export class PlausibleClient {
   private rest: AxiosInstance;
@@ -39,12 +13,12 @@ export class PlausibleClient {
     });
   }
 
-  public async getWeeklyAggregateStats(siteId: string): Promise<PlausibleStats> {
+  public async getWeeklyAggregateStats(siteId: string): Promise<Types.Stats> {
     const response = await this.rest.get('/stats/aggregate', {
       params: {
         site_id: siteId,
         period: '7d',
-        metrics: ALL_METRICS.join(','),
+        metrics: Types.ALL_METRICS.join(','),
         compare: 'previous_period'
       }
     });
@@ -52,7 +26,7 @@ export class PlausibleClient {
     return response.data.results;
   }
 
-  public async getWeeklyBreakdown(siteId: string, limit: number = 10): Promise<PlausibleFullBreakdown> {
+  public async getWeeklyBreakdown(siteId: string, limit: number = 10): Promise<Types.FullBreakdown> {
     const pageBreakdown = await this.getWeeklyBreakdownByProperty<'page'>(siteId, 'event:page', limit);
     const sourceBreakdown = await this.getWeeklyBreakdownByProperty<'source'>(siteId, 'visit:source', limit);
     const countryBreakdown = await this.getWeeklyBreakdownByProperty<'country'>(siteId, 'visit:country', limit);
@@ -66,12 +40,12 @@ export class PlausibleClient {
     };
   }
 
-  public async getWeeklyBreakdownByProperty<P extends string>(siteId: string, property: string, limit: number = 10): Promise<PlausibleBreakdown<P>[]> {
+  public async getWeeklyBreakdownByProperty<P extends string>(siteId: string, property: string, limit: number = 10): Promise<Types.Breakdown<P>[]> {
     const response = await this.rest.get('/stats/breakdown', {
       params: {
         site_id: siteId,
         period: '7d',
-        metrics: ALL_METRICS.join(','),
+        metrics: Types.ALL_METRICS.join(','),
         limit,
         property
       }
