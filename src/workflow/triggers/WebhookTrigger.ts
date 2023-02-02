@@ -9,6 +9,7 @@ import { verifySecret } from '../../express/middleware/secret';
 import { createSuccessResponse } from '../../express/response';
 import { Logger } from '../../utils/logging';
 import { Trigger } from '../Trigger';
+import { service_url } from '../../../config/config.json';
 
 export interface WebhookTriggerOptions {
   needsPayload?: boolean
@@ -32,12 +33,20 @@ export class WebhookTrigger<T> extends Trigger<T> {
   }
 
   public init(): void {
-    this.app.route(`/webhooks/${this.id}`)
+    this.app.route(this.getEndpoint())
       .post(verifySecret(this.options.needsSecret), jsonBodyRequired(this.options.needsPayload), (req: Request, res: Response) => {
         this.emit('trigger', req.body as T);
         res.status(HttpStatus.OK).send(createSuccessResponse());
       })
       .all(onlySupportedMethods('POST'));
+  }
+
+  private getEndpoint(): string {
+    return `/webhooks/${this.id}`;
+  }
+
+  public getUrl(): string {
+    return `${service_url}${this.getEndpoint()}`;
   }
 }
 
