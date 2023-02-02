@@ -2,7 +2,7 @@
 import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
-import { LastFmClient, LastFmUser, LastFmAlbum, LastFmArtist, LastFmTrack } from '../../../clients/LastFmClient';
+import * as LastFm from '../../../clients/lastfm';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { last_fm, discord_webhooks } from '../../../../config/config.json';
 
@@ -10,7 +10,7 @@ const EMBED_COLOR = 13963271;
 const MAX_ITEMS = 10;
 
 export class LastFmStatsWorkflow extends Workflow<void> {
-  private lastFmClient: LastFmClient;
+  private lastFmClient: LastFm.Client;
   private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
@@ -19,7 +19,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
       description: 'Send weekly LastFM stats on Discord'
     });
 
-    this.lastFmClient = new LastFmClient(last_fm.api_key);
+    this.lastFmClient = new LastFm.Client(last_fm.api_key);
     this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.last_fm_stats);
   }
 
@@ -53,7 +53,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     return this.discordWebhookClient.send(this.createStatsPayload(baseEmbed, profile, slicedAlbums, slicedArtists, slicedTracks));
   }
 
-  private createNoScrobblesPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFmUser): DiscordWebhook.Types.WebhookPayload {
+  private createNoScrobblesPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFm.Types.User): DiscordWebhook.Types.WebhookPayload {
     return {
       embeds: [{
         ...baseEmbed,
@@ -64,7 +64,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private createStatsPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFmUser, albums: LastFmAlbum[], artists: LastFmArtist[], tracks: LastFmTrack[]): DiscordWebhook.Types.WebhookPayload {
+  private createStatsPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFm.Types.User, albums: LastFm.Types.Album[], artists: LastFm.Types.Artist[], tracks: LastFm.Types.Track[]): DiscordWebhook.Types.WebhookPayload {
     const mostListenedTrackImages = tracks[0].image;
     const mostListenedTrackImage = mostListenedTrackImages[mostListenedTrackImages.length - 1]['#text'];
 
