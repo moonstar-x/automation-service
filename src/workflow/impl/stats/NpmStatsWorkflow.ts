@@ -4,6 +4,7 @@ import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import * as Npm from '../../../clients/npm';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
+import { levelDatabaseService } from '../../../services/LevelDatabaseService';
 import { discord_webhooks, npm_packages } from '../../../../config/config.json';
 
 const EMBED_COLOR = 14777974;
@@ -29,22 +30,47 @@ export class NpmStatsWorkflow extends Workflow<void> {
       acc[download.package] = download;
       return acc;
     }, {} as Record<string, Npm.Types.NpmPackageDownloads>);
-
-    return this.discordWebhookClient.send(this.createPayload(packagesInfo, downloadsByPackage));
+    const downloadComparisonByPackage = await this.getDownloadsComparison(downloadsByPackage);
+    
+    await this.discordWebhookClient.send(this.createPayload(packagesInfo, downloadsByPackage, downloadComparisonByPackage));
+    await this.persistCurrentDownloads(downloadsByPackage);
   }
 
-  private createPayload(packagesInfo: Record<string, Npm.Types.PackageInfo>, downloadsByPackage: Record<string, Npm.Types.NpmPackageDownloads>): DiscordWebhook.Types.WebhookPayload {
+  private async getDownloadsComparison(currentDownloads: Record<string, Npm.Types.NpmPackageDownloads>): Promise<Record<string, number>> {
+    const previousDownloads = (await levelDatabaseService.get<Record<string, number>>('npm:downloads')) ?? {};
+
+    return Object.fromEntries(Object.entries(currentDownloads).map(([pkg, { downloads }]) => {
+      return [pkg, downloads - (previousDownloads[pkg] ?? 0)];
+    }));
+  }
+
+  private async persistCurrentDownloads(currentDownloads: Record<string, Npm.Types.NpmPackageDownloads>): Promise<void> {
+    const downloadsToSave = Object.fromEntries(Object.entries(currentDownloads).map(([pkg, { downloads }]) => {
+      return [pkg, downloads];
+    }));
+
+    await levelDatabaseService.set('npm:downloads', downloadsToSave);
+  }
+
+  private createPayload(packagesInfo: Record<string, Npm.Types.PackageInfo>, downloadsByPackage: Record<string, Npm.Types.NpmPackageDownloads>, downloadComparison: Record<string, number>): DiscordWebhook.Types.WebhookPayload {
     const fields: DiscordWebhook.Types.EmbedField[] = Object.entries(packagesInfo).map(([pkg, info]) => {
       const downloads: Npm.Types.NpmPackageDownloads = downloadsByPackage[pkg];
+      const deltaDownloads: number = downloadComparison[pkg];
 
       const overallScore = `${Math.floor(info.score.final * 100)}%`;
       const qualityScore = `${Math.floor(info.score.detail.quality * 100)}%`;
       const popularityScore = `${Math.floor(info.score.detail.popularity * 100)}%`;
       const maintenanceScore = `${Math.floor(info.score.detail.maintenance * 100)}%`;
 
+      const deltaString = deltaDownloads < 0 ?
+        `📉 ${-deltaDownloads} since last week` :
+        deltaDownloads > 0 ?
+          `📈 ${deltaDownloads} since last week` :
+          '💤 no change since last week';
+
       return {
         name: `${info.collected.metadata.name}@${info.collected.metadata.version}`,
-        value: `**${downloads.downloads}** downloads/week. Score: **${overallScore}** [Q: **${qualityScore}** P: **${popularityScore}** M: **${maintenanceScore}**] ([Package Link](${info.collected.metadata.links.npm}))`
+        value: `**${downloads.downloads}** downloads/week (**${deltaString}**). Score: **${overallScore}** [Q: **${qualityScore}** P: **${popularityScore}** M: **${maintenanceScore}**] ([Package Link](${info.collected.metadata.links.npm}))`
       };
     });
     
