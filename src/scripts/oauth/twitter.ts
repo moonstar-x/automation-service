@@ -39,7 +39,7 @@ const main = async () => {
       continue;
     }
 
-    const { url, codeVerifier, state } = loginClient.generateOAuth2AuthLink(callbackUrl, { scope: ['tweet.read', 'tweet.write', 'offline.access'] });
+    const { url, codeVerifier, state } = loginClient.generateOAuth2AuthLink(callbackUrl, { scope: ['tweet.read', 'users.read', 'offline.access', 'tweet.write'] });
     verifierCache.set(state, { user, state, codeVerifier });
 
     console.log(`Please visit as ${user} the following URL: ${url}`);
