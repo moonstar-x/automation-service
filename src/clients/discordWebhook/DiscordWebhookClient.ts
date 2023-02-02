@@ -1,53 +1,11 @@
 import axios from 'axios';
-export interface EmbedFooter {
-  text: string
-  icon_url?: string
-}
-
-export interface EmbedImage {
-  url: string
-}
-
-export interface EmbedProvider {
-  name?: string
-  url?: string
-}
-
-export interface EmbedAuthor {
-  name: string
-  url?: string
-  icon_url?: string
-}
-
-export interface EmbedField {
-  name: string
-  value: string
-  inline?: boolean
-}
-
-export interface DiscordEmbed {
-  title?: string
-  description?: string
-  url?: string
-  timestamp?: string
-  color?: number
-  footer?: EmbedFooter
-  image?: EmbedImage
-  thumbnail?: EmbedImage
-  author?: EmbedAuthor
-  fields?: EmbedField[]
-}
-
-export interface DiscordWebhookPayload {
-  content?: string
-  embeds?: DiscordEmbed[]
-}
+import * as Types from './types';
 
 export const DEFAULT_EMBED_COLOR = 12710396;
-export const DEFAULT_FOOTER: EmbedFooter = {
+export const DEFAULT_FOOTER: Types.EmbedFooter = {
   text: "This notification has been triggered by moonstar-x's automation service."
 };
-export const DEFAULT_AUTHOR: EmbedAuthor = {
+export const DEFAULT_AUTHOR: Types.EmbedAuthor = {
   name: "moonstar-x's Automation Service",
   url: 'https://github.com/moonstar-x/automation-service',
   icon_url: 'https://avatars.githubusercontent.com/u/14969195?v=4'
@@ -60,10 +18,10 @@ export class DiscordWebhookClient {
     this.webhook = webhook;
   }
 
-  public async send(payload: DiscordWebhookPayload): Promise<void> {
+  public async send(payload: Types.WebhookPayload): Promise<void> {
     this.validatePayload(payload);
 
-    const completePayload: DiscordWebhookPayload = payload.embeds ?
+    const completePayload: Types.WebhookPayload = payload.embeds ?
       {
         ...payload,
         embeds: payload.embeds.map((embed) => ({
@@ -78,7 +36,7 @@ export class DiscordWebhookClient {
     await axios.post(this.webhook, completePayload);
   }
 
-  private validatePayload(payload: DiscordWebhookPayload) {
+  private validatePayload(payload: Types.WebhookPayload) {
     if (!payload.content && !payload.embeds) {
       throw new Error('Payload should have either content and/or embeds.');
     }

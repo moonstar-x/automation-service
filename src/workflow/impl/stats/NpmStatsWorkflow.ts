@@ -3,14 +3,14 @@ import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import { NpmClient, NpmPackageDownloads, NpmsPackageInfo } from '../../../clients/NpmClient';
-import { DiscordWebhookClient, DiscordWebhookPayload, EmbedField } from '../../../clients/DiscordWebhookClient';
+import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks, npm_packages } from '../../../../config/config.json';
 
 const EMBED_COLOR = 14777974;
 
 export class NpmStatsWorkflow extends Workflow<void> {
   private npmClient: NpmClient;
-  private discordWebhookClient: DiscordWebhookClient;
+  private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {
@@ -19,7 +19,7 @@ export class NpmStatsWorkflow extends Workflow<void> {
     });
 
     this.npmClient = new NpmClient();
-    this.discordWebhookClient = new DiscordWebhookClient(discord_webhooks.npm_stats);
+    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.npm_stats);
   }
 
   public async run(): Promise<void> {
@@ -33,8 +33,8 @@ export class NpmStatsWorkflow extends Workflow<void> {
     return this.discordWebhookClient.send(this.createPayload(packagesInfo, downloadsByPackage));
   }
 
-  private createPayload(packagesInfo: Record<string, NpmsPackageInfo>, downloadsByPackage: Record<string, NpmPackageDownloads>): DiscordWebhookPayload {
-    const fields: EmbedField[] = Object.entries(packagesInfo).map(([pkg, info]) => {
+  private createPayload(packagesInfo: Record<string, NpmsPackageInfo>, downloadsByPackage: Record<string, NpmPackageDownloads>): DiscordWebhook.Types.WebhookPayload {
+    const fields: DiscordWebhook.Types.EmbedField[] = Object.entries(packagesInfo).map(([pkg, info]) => {
       const downloads: NpmPackageDownloads = downloadsByPackage[pkg];
 
       const overallScore = `${Math.floor(info.score.final * 100)}%`;

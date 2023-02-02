@@ -3,7 +3,7 @@ import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import { LastFmClient, LastFmUser, LastFmAlbum, LastFmArtist, LastFmTrack } from '../../../clients/LastFmClient';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed } from '../../../clients/DiscordWebhookClient';
+import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { last_fm, discord_webhooks } from '../../../../config/config.json';
 
 const EMBED_COLOR = 13963271;
@@ -11,7 +11,7 @@ const MAX_ITEMS = 10;
 
 export class LastFmStatsWorkflow extends Workflow<void> {
   private lastFmClient: LastFmClient;
-  private discordWebhookClient: DiscordWebhookClient;
+  private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {
@@ -20,7 +20,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     });
 
     this.lastFmClient = new LastFmClient(last_fm.api_key);
-    this.discordWebhookClient = new DiscordWebhookClient(discord_webhooks.last_fm_stats);
+    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.last_fm_stats);
   }
 
   public async run(): Promise<void> {
@@ -29,7 +29,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     const artists = (await this.lastFmClient.getWeeklyArtistChart(last_fm.user)).artist;
     const tracks = (await this.lastFmClient.getWeeklyTrackChart(last_fm.user)).track;
 
-    const baseEmbed: DiscordEmbed = {
+    const baseEmbed: DiscordWebhook.Types.Embed = {
       color: EMBED_COLOR,
       author: {
         name: 'Music Listening Stats for moonstar-x',
@@ -53,7 +53,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     return this.discordWebhookClient.send(this.createStatsPayload(baseEmbed, profile, slicedAlbums, slicedArtists, slicedTracks));
   }
 
-  private createNoScrobblesPayload(baseEmbed: DiscordEmbed, profile: LastFmUser): DiscordWebhookPayload {
+  private createNoScrobblesPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFmUser): DiscordWebhook.Types.WebhookPayload {
     return {
       embeds: [{
         ...baseEmbed,
@@ -64,7 +64,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private createStatsPayload(baseEmbed: DiscordEmbed, profile: LastFmUser, albums: LastFmAlbum[], artists: LastFmArtist[], tracks: LastFmTrack[]): DiscordWebhookPayload {
+  private createStatsPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFmUser, albums: LastFmAlbum[], artists: LastFmArtist[], tracks: LastFmTrack[]): DiscordWebhook.Types.WebhookPayload {
     const mostListenedTrackImages = tracks[0].image;
     const mostListenedTrackImage = mostListenedTrackImages[mostListenedTrackImages.length - 1]['#text'];
 

@@ -2,14 +2,14 @@ import { Workflow } from '../../Workflow';
 import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import { WakaTimeClient, WakaTimeStats, WakaTimeEntry } from '../../../clients/WakaTimeClient';
-import { DiscordWebhookClient, DiscordWebhookPayload } from '../../../clients/DiscordWebhookClient';
+import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks, wakatime } from '../../../../config/config.json';
 
 const EMBED_COLOR = 9093342;
 
 export class WakaTimeStatsWorkflow extends Workflow<void> {
   private wakaTimeClient: WakaTimeClient;
-  private discordWebhookClient: DiscordWebhookClient;
+  private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {
@@ -18,7 +18,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
     });
 
     this.wakaTimeClient = new WakaTimeClient(wakatime.api_key);
-    this.discordWebhookClient = new DiscordWebhookClient(discord_webhooks.wakatime_stats);
+    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.wakatime_stats);
   }
 
   public async run(): Promise<void> {
@@ -31,7 +31,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
     return this.discordWebhookClient.send(this.createStatsPayload(stats));
   }
 
-  private createEmptyPayload(): DiscordWebhookPayload {
+  private createEmptyPayload(): DiscordWebhook.Types.WebhookPayload {
     return {
       embeds: [{
         color: EMBED_COLOR,
@@ -52,7 +52,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private createStatsPayload(stats: WakaTimeStats): DiscordWebhookPayload {
+  private createStatsPayload(stats: WakaTimeStats): DiscordWebhook.Types.WebhookPayload {
     return {
       embeds: [
         {

@@ -1,6 +1,6 @@
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed } from '../../../clients/DiscordWebhookClient';
+import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks } from '../../../../config/config.json';
 
 const EMBED_COLOR = 15048717;
@@ -21,7 +21,7 @@ interface TriggerPayload {
 }
 
 export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
-  private discordWebhookClient: DiscordWebhookClient;
+  private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('ombi', { needsSecret: true }), {
@@ -29,7 +29,7 @@ export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
       description: 'Send Ombi notifications on Discord'
     });
 
-    this.discordWebhookClient = new DiscordWebhookClient(discord_webhooks.ombi_requests);
+    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.ombi_requests);
   }
 
   public async run(payload: TriggerPayload): Promise<void> {
@@ -41,8 +41,8 @@ export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
     await this.discordWebhookClient.send(discordWebhookPayload);
   }
 
-  private createPayload(payload: TriggerPayload): DiscordWebhookPayload | null {
-    const embed: DiscordEmbed = {
+  private createPayload(payload: TriggerPayload): DiscordWebhook.Types.WebhookPayload | null {
+    const embed: DiscordWebhook.Types.Embed = {
       url: payload.applicationUrl,
       color: EMBED_COLOR,
       image: {

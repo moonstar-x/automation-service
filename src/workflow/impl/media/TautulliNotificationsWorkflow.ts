@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
-import { DiscordWebhookClient, DiscordWebhookPayload, DiscordEmbed, EmbedAuthor, EmbedField } from '../../../clients/DiscordWebhookClient';
+import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { discord_webhooks } from '../../../../config/config.json';
 
 const EMBED_COLOR = 15048717;
@@ -55,8 +55,8 @@ interface TriggerPayload {
 }
 
 export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
-  private discordTrackerWebhookClient: DiscordWebhookClient;
-  private discordStatusWebhookClient: DiscordWebhookClient;
+  private discordTrackerWebhookClient: DiscordWebhook.Client;
+  private discordStatusWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('tautulli', { needsSecret: true }), {
@@ -64,8 +64,8 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       description: 'Send Tautulli notifications on Discord'
     });
 
-    this.discordTrackerWebhookClient = new DiscordWebhookClient(discord_webhooks.plex_tracker);
-    this.discordStatusWebhookClient = new DiscordWebhookClient(discord_webhooks.plex_status);
+    this.discordTrackerWebhookClient = new DiscordWebhook.Client(discord_webhooks.plex_tracker);
+    this.discordStatusWebhookClient = new DiscordWebhook.Client(discord_webhooks.plex_status);
   }
 
   public async run(payload: TriggerPayload): Promise<void> {
@@ -81,8 +81,8 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
     return this.discordStatusWebhookClient.send(discordWebhookPayload);
   }
 
-  private createPayload(payload: TriggerPayload): DiscordWebhookPayload | null {
-    const embed: DiscordEmbed = {
+  private createPayload(payload: TriggerPayload): DiscordWebhook.Types.WebhookPayload | null {
+    const embed: DiscordWebhook.Types.Embed = {
       url: payload.plexUrl,
       color: EMBED_COLOR,
       footer: {
@@ -90,7 +90,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       }
     };
 
-    const playbackAuthor: EmbedAuthor = {
+    const playbackAuthor: DiscordWebhook.Types.EmbedAuthor = {
       name: payload.stream.user.name,
       icon_url: payload.stream.user.image
     };
@@ -102,7 +102,7 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
         url: payload.stream.media.poster
       }
     };
-    const playbackFields: EmbedField[] = [
+    const playbackFields: DiscordWebhook.Types.EmbedField[] = [
       { name: 'Library', value: payload.stream.media.library, inline: true },
       { name: 'Transcode Decision', value: payload.stream.media.transcode, inline: true },
       { name: 'Device', value: payload.stream.user.device, inline: true },
