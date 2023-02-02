@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import { Workflow } from './workflow/Workflow';
 import { Logger } from './utils/logging';
-import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/webhook/WebhookManager';
+import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/WebhookTrigger';
 import { getAllFilesRecursive } from './utils/filesystem';
 
 export interface ApplicationEvents {
