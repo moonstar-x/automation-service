@@ -28,3 +28,9 @@ export const getAllFilesRecursive = (directory: string): string[] => {
 
   return traverseDirectory(directory, []);
 };
+
+export const createDirectoryIfNoExists = (path: string) => {
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path, { recursive: true });
+  }
+};
