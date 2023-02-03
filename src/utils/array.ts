@@ -19,3 +19,8 @@ export const containsAll = (arr1: unknown[], arr2: unknown[]): boolean => {
 export const sameArrays = (arr1: unknown[], arr2: unknown[]): boolean => {
   return containsAll(arr1, arr2) && containsAll(arr2, arr1);
 };
+
+export const randomItemFromArray = <T>(arr: T[]): T => {
+  const index = Math.floor(Math.random() * arr.length);
+  return arr[index];
+};
