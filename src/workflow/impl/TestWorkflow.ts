@@ -5,7 +5,7 @@ import { github } from '../../../config/config.json';
 
 export class TestWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
   constructor(application: Application) {
-    super(application, application.githubTriggerManager.createTrigger(github.token, github.repos, ['check_suite']), {
+    super(application, application.githubTriggerManager.createTrigger(github.token, github.repos, ['push', 'commit_comment', 'release', 'issues']), {
       name: 'TestWorkflow',
       description: 'Testing stuff'
     });

@@ -23,14 +23,13 @@ export class GitHubTrigger extends Trigger<GitHub.Types.WebhookEvent> {
     }));
 
     this.webhookTrigger.on('trigger', (data) => {
-      if (!data || !('action' in data)) {
+      if (!data || !('repository' in data)) {
         return;
       }
 
-      if (this.events.some((event) => data.action === event)) {
-        console.log(data);
+      if (this.repos.some((repo) => data.repository?.full_name === repo)) {
+        this.emit('trigger', data);
       }
-      this.emit('trigger', data);
     });
   }
 }
