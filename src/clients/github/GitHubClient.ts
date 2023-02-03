@@ -1,3 +1,4 @@
+import { sameArrays } from './../../utils/array';
 import axios, { AxiosInstance } from 'axios';
 import * as Types from './types';
 
@@ -51,7 +52,32 @@ export class GitHubClient {
     return response.data;
   }
 
-  public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEventName[]) {
-    console.log(repo, url, events);
+  public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEventName[]): Promise<void> {
+    const webhooks = (await this.rest.get(`/repos/${repo}/hooks`)).data;
+
+    const webhookToOverwrite = webhooks.find((hook: any) => {
+      return hook.config?.url === url &&
+        hook.config?.content_type === 'json' &&
+        hook.config?.insecure_ssl === '1';
+    });
+
+    if (!webhookToOverwrite) {
+      return await this.rest.post(`/repos/${repo}/hooks`, {
+        name: 'web',
+        config: {
+          url,
+          content_type: 'json',
+          insecure_ssl: '1'
+        },
+        events,
+        active: true
+      });
+    }
+
+    if (!sameArrays(webhookToOverwrite.events, events)) {
+      return await this.rest.patch(`/repos/${repo}/hooks/${webhookToOverwrite.id}`, {
+        events
+      });
+    }
   }
 }
