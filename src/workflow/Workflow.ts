@@ -6,6 +6,7 @@ import { createExecutionTimer } from '../utils/time';
 export interface WorkflowMetadata {
   name: string
   description: string
+  inDevelopment?: boolean
 }
 
 export abstract class Workflow<T> {
@@ -40,7 +41,10 @@ export abstract class Workflow<T> {
       this.application.emit('workflowFinish', this);
     } catch (error) {
       this.logger.error('An error has occurred when running the workflow.', error);
-      this.application.emit('workflowError', this, error as Error);
+
+      if (!this.metadata.inDevelopment) {
+        this.application.emit('workflowError', this, error as Error);
+      }
     }
   }
 
