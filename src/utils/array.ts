@@ -11,3 +11,11 @@ export const splitArrayByCount = <T>(arr: T[], count: number): T[][] => {
     return table;
   }, finalArray);
 };
+
+export const containsAll = (arr1: unknown[], arr2: unknown[]): boolean => {
+  return arr2.every((arr2Item) => arr1.includes(arr2Item));
+};
+
+export const sameArrays = (arr1: unknown[], arr2: unknown[]): boolean => {
+  return containsAll(arr1, arr2) && containsAll(arr2, arr1);
+};
