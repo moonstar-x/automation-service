@@ -48,6 +48,19 @@ export class DirectoryManager {
     } as DirectoryContent);
   }
 
+  public async getFile(file: string): Promise<FileLocation | null> {
+    const absolutePath = path.join(this.location, file);
+    try {
+      await fs.promises.access(absolutePath, fs.constants.F_OK);
+      return {
+        name: file,
+        absolutePath
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
   public goToParent(): DirectoryManager {
     return this.service.createDirectoryManager(path.dirname(this.location));
   }
