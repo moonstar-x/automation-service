@@ -4,6 +4,7 @@ import { Logger } from './utils/logging';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/WebhookTrigger';
 import { GitHubTriggerManager } from './workflow/triggers/GitHubTrigger';
 import { getAllFilesRecursive } from './utils/filesystem';
+import { disabled_workflows } from '../config/config.json';
 
 export interface ApplicationEvents {
   workflowRegistered: [Workflow<unknown>]
@@ -48,6 +49,11 @@ export class Application extends EventEmitter {
   public async registerWorkflow(workflow: Workflow<unknown>): Promise<void> {
     if (this.workflows.has(workflow.metadata.name)) {
       throw new Error(`Workflow ${workflow.metadata.name} has already been registered.`);
+    }
+
+    if (disabled_workflows?.includes(workflow.metadata.name)) {
+      this.logger.warn(`Workflow ${workflow.metadata.name} is disabled.`);
+      return;
     }
 
     await workflow.setup();
