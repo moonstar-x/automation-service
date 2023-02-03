@@ -42,18 +42,18 @@ export class Application extends EventEmitter {
     });
   }
 
-  public registerWorkflow(workflow: Workflow<unknown>): void {
+  public async registerWorkflow(workflow: Workflow<unknown>): Promise<void> {
     if (this.workflows.has(workflow.metadata.name)) {
       throw new Error(`Workflow ${workflow.metadata.name} has already been registered.`);
     }
 
-    workflow.setup();
+    await workflow.setup();
     this.workflows.set(workflow.metadata.name, workflow);
     this.emit('workflowRegistered', workflow);
   }
 
-  public registerWorkflows(workflows: Workflow<unknown>[]): void {
-    workflows.map((workflow) => this.registerWorkflow(workflow));
+  public async registerWorkflows(workflows: Workflow<unknown>[]): Promise<void[]> {
+    return Promise.all(workflows.map((workflow) => this.registerWorkflow(workflow)));
   }
 
   public async registerWorkflowsIn(absoluteDirectory: string): Promise<void> {
@@ -71,6 +71,6 @@ export class Application extends EventEmitter {
         });
     }))).flat(1);
 
-    this.registerWorkflows(workflows);
+    await this.registerWorkflows(workflows);
   }
 }

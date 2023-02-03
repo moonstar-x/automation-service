@@ -21,7 +21,7 @@ export abstract class Workflow<T> {
     this.logger = new Logger(metadata.name);
   }
 
-  public setup(): void {
+  public async setup(): Promise<void> {
     this.trigger.init();
     this.trigger.on('trigger', (payload?: T) => this.execute(payload));
   }

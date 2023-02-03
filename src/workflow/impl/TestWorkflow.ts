@@ -20,7 +20,9 @@ export class TestWorkflow extends Workflow<void> {
     });
   }
 
-  public async run(): Promise<void> {
+  public override async setup(): Promise<void> {
+    await super.setup();
+
     const username = 'moonstar_x99';
     const credentials = await levelDatabaseService.get<Twitter.Types.OAuthV1Tokens>(`twitter:creds:v1:${username}`);
 
@@ -29,14 +31,14 @@ export class TestWorkflow extends Workflow<void> {
     }
 
     this.twitterClient.login(credentials);
+  }
 
-    // await this.twitterClient.tweet('Testing stuff', {
-    //   place: {
-    //     lat: -82.8628,
-    //     long: 135.0000
-    //   }
-    // });
-
-    console.log(await this.twitterClient.retweet('1621180398528258048'));
+  public async run(): Promise<void> {
+    await this.twitterClient.tweet('Testing stuff', {
+      place: {
+        lat: -82.8628,
+        long: 135.0000
+      }
+    });
   }
 }
