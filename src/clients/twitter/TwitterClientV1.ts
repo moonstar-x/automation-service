@@ -46,8 +46,17 @@ export class TwitterClientV1 {
     return await client.v1.tweet(message, options);
   }
 
+  public async reply(message: string, replyToTweetId: string, options?: Partial<SendTweetV1Params>) {
+    const client = this.getClient();
+    return await client.v1.reply(message, replyToTweetId, options);
+  }
+
   public async retweet(tweetId: string): Promise<TweetV1> {
     const client = this.getClient();
     return await client.v1.post(`statuses/retweet/${tweetId}.json`);
+  }
+
+  public static truncateMessage(message: string): string {
+    return message.length < 270 ? message : `${message.slice(0, 270)} (...)`;
   }
 }
