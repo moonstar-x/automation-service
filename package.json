@@ -24,7 +24,6 @@
   },
   "homepage": "https://github.com/moonstar-x/automation-service#readme",
   "dependencies": {
-    "@twitter-api-v2/plugin-token-refresher": "^1.0.0",
     "axios": "^1.2.6",
     "body-parser": "^1.20.1",
     "chalk": "^4.1.2",
