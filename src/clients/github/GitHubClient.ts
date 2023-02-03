@@ -51,7 +51,7 @@ export class GitHubClient {
     return response.data;
   }
 
-  public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEvent[]) {
+  public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEventName[]) {
     console.log(repo, url, events);
   }
 }

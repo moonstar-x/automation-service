@@ -1,3 +1,5 @@
+export { WebhookEvent, WebhookEventName } from '@octokit/webhooks-types';
+
 export interface RepoData {
   id: number
   node_id: string
@@ -168,9 +170,3 @@ export interface RepoPageViews {
   uniques: number
   views: RepoPageView[]
 }
-
-export interface EventPayload {
-  test: string
-}
-
-export type WebhookEvent = 'branch_protection_rule';
