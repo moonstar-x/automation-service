@@ -11,6 +11,7 @@ const main = async () => {
 
   await app.registerWorkflowsIn(path.join(__dirname, './workflow/impl'));
 
+  app.githubTriggerManager.start();
   app.webhookManager.start();
 };
 

@@ -1,18 +1,17 @@
-import { TweetV2SingleStreamResult } from 'twitter-api-v2';
 import { Workflow } from '../Workflow';
 import { Application } from './../../Application';
-import { TwitterTrigger } from './../triggers/TwitterTrigger';
-import { twitter } from '../../../config/config.json';
+import * as GitHub from '../../clients/github';
+import { github } from '../../../config/config.json';
 
-export class TestWorkflow extends Workflow<TweetV2SingleStreamResult> {
+export class TestWorkflow extends Workflow<GitHub.Types.EventPayload> {
   constructor(application: Application) {
-    super(application, new TwitterTrigger(twitter.bearer_token, ['moonstar_x99']), {
+    super(application, application.githubTriggerManager.createTrigger(github.token, ['moonstar-x/webframes'], ['branch_protection_rule']), {
       name: 'TestWorkflow',
       description: 'Testing stuff'
     });
   }
 
-  public async run(payload: TweetV2SingleStreamResult): Promise<void> {
+  public async run(payload: GitHub.Types.EventPayload): Promise<void> {
     console.log(payload);
   }
 }

@@ -168,3 +168,9 @@ export interface RepoPageViews {
   uniques: number
   views: RepoPageView[]
 }
+
+export interface EventPayload {
+  test: string
+}
+
+export type WebhookEvent = 'branch_protection_rule';

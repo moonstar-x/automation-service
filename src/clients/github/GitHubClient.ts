@@ -50,4 +50,8 @@ export class GitHubClient {
 
     return response.data;
   }
+
+  public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEvent[]) {
+    console.log(repo, url, events);
+  }
 }
