@@ -41,19 +41,9 @@ export class TwitterClientV1 {
     return Promise.all(fileLocations.map((fileLocation) => this.uploadMedia(fileLocation)));
   }
 
-  public async tweet(message: string, options?: Types.V1CustomTweetOptions) {
+  public async tweet(message: string, options?: Partial<SendTweetV1Params>) {
     const client = this.getClient();
-
-    const tweetPayload: Partial<SendTweetV1Params> = {};
-    if (options?.place) {
-      tweetPayload.lat = options.place.lat;
-      tweetPayload.long = options.place.long;
-    }
-    if (options?.mediaId) {
-      tweetPayload.media_ids = options.mediaId;
-    }
-
-    return await client.v1.tweet(message, tweetPayload);
+    return await client.v1.tweet(message, options);
   }
 
   public async retweet(tweetId: string): Promise<TweetV1> {

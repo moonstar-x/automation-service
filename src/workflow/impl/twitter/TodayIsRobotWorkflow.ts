@@ -44,11 +44,9 @@ export class TodayIsRobotWorkflow extends Workflow<void> {
 
     const mediaId = await this.twitterClient.uploadMedia(randomImage.absolutePath);
     await this.twitterClient.tweet('', {
-      mediaId,
-      place: {
-        lat: -82.8628,
-        long: 135.000
-      }
+      media_ids: mediaId,
+      lat: -82.8628,
+      long: 135.000
     });
   }
 }

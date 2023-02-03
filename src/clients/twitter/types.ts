@@ -10,14 +10,6 @@ export interface OAuthV1Tokens {
   accessSecret: string
 }
 
-export interface V1CustomTweetOptions {
-  mediaId?: string | string[]
-  place?: {
-    lat: number
-    long: number
-  }
-}
-
 // V2 Client
 
 export interface TwitterClientV2Credentials {
