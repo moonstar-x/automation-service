@@ -1,8 +1,8 @@
 import express from 'express';
 import session from 'express-session';
 import { TwitterApi } from 'twitter-api-v2';
-import { levelDatabaseService } from '../../services/LevelDatabaseService';
-import { service_url, webhook_port, twitter } from '../../../config/config.json';
+import { levelDatabaseService } from '../../../services/LevelDatabaseService';
+import { service_url, webhook_port, twitter } from '../../../../config/config.json';
 
 interface OAuthCredentials {
   accessToken: string
@@ -32,7 +32,7 @@ const verifierCache = new Map<string, VerifierForState>();
 const main = async () => {
   for (const user of twitter.users) {
     console.log(`Checking Twitter credentials for ${user}...`);
-    const storedCredentials = await levelDatabaseService.get<OAuthCredentials>(`twitter:creds:${user}`);
+    const storedCredentials = await levelDatabaseService.get<OAuthCredentials>(`twitter:creds:v2:${user}`);
 
     if (storedCredentials) {
       console.log(`Credentials found for ${user}, skipping...`);
