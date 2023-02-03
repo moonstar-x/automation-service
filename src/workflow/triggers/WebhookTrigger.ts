@@ -32,7 +32,7 @@ export class WebhookTrigger<T> extends Trigger<T> {
     };
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     this.app.route(this.getEndpoint())
       .post(verifySecret(this.options.needsSecret), jsonBodyRequired(this.options.needsPayload), (req: Request, res: Response) => {
         this.emit('trigger', req.body as T);

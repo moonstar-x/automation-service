@@ -11,7 +11,7 @@ export class ApplicationEventTrigger<T extends keyof ApplicationEvents> extends 
     this.event = event;
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     this.application.on(this.event, (...args: ApplicationEvents[T]) => this.emit('trigger', args));
   }
 }

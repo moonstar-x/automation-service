@@ -9,7 +9,7 @@ export class CronTrigger extends Trigger<void> {
     this.cron = new CronJob(cronExpression, () => this.emit('trigger'));
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     this.cron.start();
   }
 }

@@ -22,7 +22,7 @@ export abstract class Workflow<T> {
   }
 
   public async setup(): Promise<void> {
-    this.trigger.init();
+    await this.trigger.init();
     this.trigger.on('trigger', (payload?: T) => this.execute(payload));
   }
 

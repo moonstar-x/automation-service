@@ -11,7 +11,7 @@ export class IntervalTrigger extends Trigger<void> implements Clearable {
     this.interval = intervalSeconds * 1000;
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     if (this.handler) {
       return;
     }

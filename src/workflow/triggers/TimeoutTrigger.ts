@@ -11,7 +11,7 @@ export class TimeoutTrigger extends Trigger<void> implements Clearable {
     this.timeout = timeoutSeconds * 1000;
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     if (this.handler) {
       return;
     }
