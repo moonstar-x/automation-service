@@ -16,6 +16,12 @@ export declare interface Trigger<T> {
 
 export abstract class Trigger<T> extends EventEmitter {
   public abstract init(): Promise<void>
+
+  public mock(mockedPayload?: T, timeoutMilliseconds?: number): void {
+    setTimeout(() => {
+      this.emit('trigger', mockedPayload);
+    }, timeoutMilliseconds ?? 5000);
+  }
 }
 
 export interface Clearable {
