@@ -1,5 +1,4 @@
 import express from 'express';
-import session from 'express-session';
 import { TwitterApi } from 'twitter-api-v2';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
 import { config } from '../../../config';
@@ -30,14 +29,6 @@ interface VerifierForState {
 }
 
 const app = express();
-app.use(session({
-  secret: 'super secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    secure: 'auto'
-  }
-}));
 
 const loginClient = new TwitterApi({ appKey: config.custom.twitter.api_key, appSecret: config.custom.twitter.api_key_secret });
 const callbackUrl = `${config.service_url}/oauth/twitter`;
