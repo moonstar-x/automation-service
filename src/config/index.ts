@@ -33,6 +33,10 @@ const validateBaseConfig = (config: BaseConfig) => {
     throw new TypeError('config.webhook_secret must be a string.');
   }
 
+  if (typeof config.enable_twitter_trigger !== 'boolean') {
+    throw new TypeError('config.enable_twitter_trigger must be a boolean.');
+  }
+
   if (!Array.isArray(config.disabled_workflows)) {
     throw new TypeError('config.disabled_workflows must be an array.');
   }

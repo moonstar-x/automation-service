@@ -2,6 +2,7 @@ debug: true
 service_url: http://localhost:4000
 webhook_port: 4000
 webhook_secret: my_cool_secret
+enable_twitter_trigger: false
 disabled_workflows: []
 
 custom:
