@@ -6,6 +6,8 @@ const getApiBaseUrl = (region: Types.ApiRegion | Types.ApiMatchRegion) => {
   return `https://${region}.api.riotgames.com/lol`;
 };
 
+const DATA_DRAGON_VERSION_URL = 'https://ddragon.leagueoflegends.com/api/versions.json';
+
 export class LeagueOfLegendsClient {
   private apiRest: AxiosInstance;
   private matchRest: AxiosInstance;
@@ -62,5 +64,15 @@ export class LeagueOfLegendsClient {
 
   public getLastMatchesForSummonerByPuuid(puuid: string, count: number = 10): Promise<Types.Match[]> {
     return this.getMatchesForSummonerByPuuid(puuid, 0, count);
+  }
+
+  private async getLatestDataDragonVersion(): Promise<string> {
+    const response = await axios.get(DATA_DRAGON_VERSION_URL);
+    return response.data[0];
+  }
+
+  public async getSummonerProfileIconUrl(profileIconId: string | number): Promise<string> {
+    const latestDataDragonVersion = await this.getLatestDataDragonVersion();
+    return `https://ddragon.leagueoflegends.com/cdn/${latestDataDragonVersion}/img/profileicon/${profileIconId}.png`;
   }
 }
