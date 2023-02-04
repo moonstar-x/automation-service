@@ -61,8 +61,10 @@ export class Application extends EventEmitter {
     this.emit('workflowRegistered', workflow);
   }
 
-  public async registerWorkflows(workflows: Workflow<unknown>[]): Promise<void[]> {
-    return Promise.all(workflows.map((workflow) => this.registerWorkflow(workflow)));
+  public async registerWorkflows(workflows: Workflow<unknown>[]): Promise<void> {
+    for (const workflow of workflows) {
+      await this.registerWorkflow(workflow);
+    }
   }
 
   public async registerWorkflowsIn(absoluteDirectory: string): Promise<void> {
