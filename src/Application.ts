@@ -3,6 +3,7 @@ import { Workflow } from './workflow/Workflow';
 import { Logger } from './utils/logging';
 import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/WebhookTrigger';
 import { GitHubTriggerManager } from './workflow/triggers/GitHubTrigger';
+import { TwitterTriggerManager, TwitterTriggerManagerOptions } from './workflow/triggers/TwitterTrigger';
 import { getAllFilesRecursive } from './utils/filesystem';
 import { config } from './config';
 
@@ -23,20 +24,26 @@ export declare interface Application {
 
 export interface ApplicationOptions {
   webhookManager: WebhookManagerOptions
+  twitterTriggerManager?: TwitterTriggerManagerOptions
 }
 
 export class Application extends EventEmitter {
   private workflows: Map<string, Workflow<unknown>>;
   private logger: Logger;
+
   public readonly webhookManager: WebhookManager;
   public readonly githubTriggerManager: GitHubTriggerManager;
+  public readonly twitterTriggerManager: TwitterTriggerManager | null;
 
   constructor(options: ApplicationOptions) {
     super();
     this.workflows = new Map<string, Workflow<unknown>>();
     this.logger = new Logger('Application');
+
     this.webhookManager = new WebhookManager(options.webhookManager);
     this.githubTriggerManager = new GitHubTriggerManager(this.webhookManager.createTrigger('github'));
+    this.twitterTriggerManager = options.twitterTriggerManager ? new TwitterTriggerManager(options.twitterTriggerManager) : null;
+
     this.registerEvents();
   }
 

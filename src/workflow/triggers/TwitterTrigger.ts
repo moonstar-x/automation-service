@@ -1,43 +1,92 @@
 import { TwitterApi, TweetStream, TweetV2SingleStreamResult, ETwitterStreamEvent } from 'twitter-api-v2';
 import { Logger } from '../../utils/logging';
-import { Trigger, Clearable } from '../Trigger';
+import { Trigger } from '../Trigger';
 
-export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> implements Clearable {
+export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> {
   private client: TwitterApi;
-  private stream: TweetStream<TweetV2SingleStreamResult> | null;
-  private usernamesToFollow: string[];
   private logger: Logger;
-  private streamValue: string;
+  public readonly usernamesToFollow: string[];
+  private enabled: boolean;
 
-  constructor(bearerToken: string, usernamesToFollow: string[]) {
+  constructor(client: TwitterApi, enabled: boolean, usernamesToFollow: string[]) {
     super();
     
     if (!usernamesToFollow.length) {
       throw new Error('At least one user needs to be followed.');
     }
 
-    this.client = new TwitterApi(bearerToken);
-    this.stream = null;
-    this.usernamesToFollow = usernamesToFollow;
+    this.client = client;
     this.logger = new Logger('TwitterTrigger');
-
-    this.streamValue = this.usernamesToFollow.map((username) => `from:${username}`).join(' ');
+    this.usernamesToFollow = usernamesToFollow;
+    this.enabled = enabled;
   }
 
   public async init(): Promise<void> {
-    const currentRules = (await this.client.v2.streamRules()).data ?? [];
-    const ruleForThisTrigger = currentRules.find((rule) => rule.tag === this.streamValue);
+    if (!this.enabled) {
+      throw new Error('Tried to create a TwitterTrigger when its manager is disabled.');
+    }
 
-    if (!ruleForThisTrigger) {
-      this.logger.debug('No rules found applicable for this trigger.');
+    const currentRules = (await this.client.v2.streamRules()).data ?? [];
+    const rulesForThisTrigger = currentRules.filter((rule) => this.usernamesToFollow.includes(rule.tag!));
+
+    if (rulesForThisTrigger.length !== this.usernamesToFollow.length) {
+      this.logger.debug('Some rules for this trigger are missing.');
+
+      const missingUsernames = this.usernamesToFollow.filter((username) => !rulesForThisTrigger.find((rule) => rule.tag === username));
 
       const setRules = await this.client.v2.updateStreamRules({
-        add: [
-          { value: this.streamValue, tag: this.streamValue }
-        ]
+        add: missingUsernames.map((username) => {
+          return { value: `from:${username}`, tag: username };
+        })
       });
   
       this.logger.debug('Added the following rules:', setRules);
+    }
+  }
+}
+
+export interface TwitterTriggerManagerOptions {
+  bearerToken: string
+  enabled?: boolean
+}
+
+export class TwitterTriggerManager {
+  private client: TwitterApi;
+  private stream: TweetStream<TweetV2SingleStreamResult> | null;
+  private logger: Logger;
+  private triggers: TwitterTrigger[];
+  private enabled: boolean;
+
+  constructor(options: TwitterTriggerManagerOptions) {
+    this.client = new TwitterApi(options.bearerToken);
+    this.stream = null;
+    this.logger = new Logger('TwitterTriggerManager');
+    this.triggers = [];
+    this.enabled = options.enabled ?? true;
+  }
+
+  public async prepare(): Promise<void> {
+    if (!this.enabled) {
+      return;
+    }
+
+    const currentRules = (await this.client.v2.streamRules()).data ?? [];
+    const currentRuleIds = currentRules.map((rule) => rule.id);
+
+    if (currentRuleIds.length) {
+      await this.client.v2.updateStreamRules({
+        delete: {
+          ids: currentRuleIds
+        }
+      });
+
+      this.logger.debug('Cleared stream rules.');
+    }
+  }
+
+  public async start(): Promise<void> {
+    if (!this.enabled) {
+      return;
     }
 
     this.stream = await this.client.v2.searchStream({
@@ -48,14 +97,22 @@ export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> implement
     this.registerStreamEvents();
   }
 
+  public createTrigger(usernamesToFollow: string[]): TwitterTrigger {
+    const trigger = new TwitterTrigger(this.client, this.enabled, usernamesToFollow);
+    this.triggers.push(trigger);
+    return trigger;
+  }
+
   private registerStreamEvents() {
     if (!this.stream) {
       return;
     }
 
     this.stream.on(ETwitterStreamEvent.Data, (data) => {
-      if (data.matching_rules.some((rule) => rule.tag === this.streamValue)) {
-        this.emit('trigger', data);
+      for (const trigger of this.triggers) {
+        if (data.matching_rules.some((rule) => trigger.usernamesToFollow.includes(rule.tag))) {
+          trigger.emit('trigger', data);
+        }
       }
     });
 
@@ -87,7 +144,9 @@ export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> implement
   }
 
   public clear(): void {
-    this.stream?.close();
-    this.stream = null;
+    if (this.stream) {
+      this.stream.close();
+      this.stream = null;
+    }
   }
 }

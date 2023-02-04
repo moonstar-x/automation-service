@@ -8,6 +8,7 @@ export interface BaseConfig {
   service_url: string
   webhook_port: number
   webhook_secret: string
+  enable_twitter_trigger: boolean
   disabled_workflows: string[]
 }
 
