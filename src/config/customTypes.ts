@@ -10,6 +10,7 @@ export interface CustomConfig {
     npm_stats: string
     wakatime_stats: string
     github_stats: string
+    twitter: string
     league_of_legends_stats_personal: string
     league_of_legends_stats_shared: string
   }
