@@ -5,7 +5,7 @@ import { CronTrigger } from './../../triggers/CronTrigger';
 import * as Npm from '../../../clients/npm';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { discord_webhooks, npm_packages } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 14777974;
 
@@ -20,12 +20,12 @@ export class NpmStatsWorkflow extends Workflow<void> {
     });
 
     this.npmClient = new Npm.Client();
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.npm_stats);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.npm_stats);
   }
 
   public async run(): Promise<void> {
-    const packagesInfo = await this.npmClient.getMultiplePackagesInfo(npm_packages);
-    const packagesDownloads = await Promise.all(npm_packages.map((pkg) => this.npmClient.getDownloadsInPeriodForPackage(pkg, 'last-week')));
+    const packagesInfo = await this.npmClient.getMultiplePackagesInfo(config.custom.npm.packages);
+    const packagesDownloads = await Promise.all(config.custom.npm.packages.map((pkg) => this.npmClient.getDownloadsInPeriodForPackage(pkg, 'last-week')));
     const downloadsByPackage = packagesDownloads.reduce((acc, download) => {
       acc[download.package] = download;
       return acc;

@@ -107,7 +107,7 @@ dist
 build
 
 # Config
-config/config.json
+config/config.yml
 
 # Data
 data

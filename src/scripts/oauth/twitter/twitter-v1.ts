@@ -2,7 +2,21 @@ import express from 'express';
 import session from 'express-session';
 import { TwitterApi } from 'twitter-api-v2';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { service_url, webhook_port, twitter } from '../../../../config/config.json';
+import { config } from '../../../config';
+
+console.warn(`This script requires you to have a special config for Twitter inside custom with the following structure:
+
+twitter:
+  api_key: string
+  api_key_secret: string
+  client_id: string
+  client_secret: string
+  bearer_token: string
+  users:
+    - my_account_handle
+
+Make sure that your config has this inside custom.
+`);
 
 interface OAuthCredentials {
   accessToken: string
@@ -25,12 +39,12 @@ app.use(session({
   }
 }));
 
-const loginClient = new TwitterApi({ appKey: twitter.api_key, appSecret: twitter.api_key_secret });
-const callbackUrl = `${service_url}/oauth/twitter`;
+const loginClient = new TwitterApi({ appKey: config.custom.twitter.api_key, appSecret: config.custom.twitter.api_key_secret });
+const callbackUrl = `${config.service_url}/oauth/twitter`;
 const verifierCache = new Map<string, VerifierForState>();
 
 const main = async () => {
-  for (const user of twitter.users) {
+  for (const user of config.custom.twitter.users) {
     console.log(`Checking Twitter credentials for ${user}...`);
     const storedCredentials = await levelDatabaseService.get<OAuthCredentials>(`twitter:creds:v1:${user}`);
 
@@ -62,8 +76,8 @@ app.get('/oauth/twitter', async (req, res) => {
 
   try {
     const client = new TwitterApi({
-      appKey: twitter.api_key,
-      appSecret: twitter.api_key_secret,
+      appKey: config.custom.twitter.api_key,
+      appSecret: config.custom.twitter.api_key_secret,
       accessToken: oauth_token as string,
       accessSecret: cached.oauthTokenSecret as string
     });
@@ -78,8 +92,8 @@ app.get('/oauth/twitter', async (req, res) => {
   }
 });
 
-app.listen(webhook_port, async () => {
-  console.log(`HTTP server started on port ${webhook_port}`);
+app.listen(config.webhook_port, async () => {
+  console.log(`HTTP server started on port ${config.webhook_port}`);
   await main();
 });
 

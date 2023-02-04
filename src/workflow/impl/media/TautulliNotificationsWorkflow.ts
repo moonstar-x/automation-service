@@ -2,7 +2,7 @@
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { discord_webhooks } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 15048717;
 
@@ -64,8 +64,8 @@ export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
       description: 'Send Tautulli notifications on Discord'
     });
 
-    this.discordTrackerWebhookClient = new DiscordWebhook.Client(discord_webhooks.plex_tracker);
-    this.discordStatusWebhookClient = new DiscordWebhook.Client(discord_webhooks.plex_status);
+    this.discordTrackerWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.plex_tracker);
+    this.discordStatusWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.plex_status);
   }
 
   public async run(payload: TriggerPayload): Promise<void> {

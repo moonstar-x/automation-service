@@ -9,7 +9,7 @@ import { verifySecret } from '../../express/middleware/secret';
 import { createSuccessResponse } from '../../express/response';
 import { Logger } from '../../utils/logging';
 import { Trigger } from '../Trigger';
-import { service_url } from '../../../config/config.json';
+import { config } from '../../config';
 
 export interface WebhookTriggerOptions {
   needsPayload?: boolean
@@ -46,7 +46,7 @@ export class WebhookTrigger<T> extends Trigger<T> {
   }
 
   public getUrl(): string {
-    return `${service_url}${this.getEndpoint()}`;
+    return `${config.service_url}${this.getEndpoint()}`;
   }
 }
 

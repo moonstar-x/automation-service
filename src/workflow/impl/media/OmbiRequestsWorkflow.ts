@@ -1,7 +1,7 @@
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { discord_webhooks } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 15048717;
 
@@ -29,7 +29,7 @@ export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
       description: 'Send Ombi notifications on Discord'
     });
 
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.ombi_requests);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.ombi_requests);
   }
 
   public async run(payload: TriggerPayload): Promise<void> {

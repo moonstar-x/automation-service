@@ -1,6 +1,6 @@
 import chalk, { Chalk } from 'chalk';
 import util from 'util';
-import { debug } from '../../config/config.json';
+import { config } from '../config';
 
 const parseArguments = (args: unknown[]) => {
   return args.map((item) => {
@@ -36,7 +36,7 @@ export class Logger {
   }
 
   debug(...args: unknown[]): void {
-    if (debug) {
+    if (config.debug) {
       console.debug(prepareMessage(chalk.green, this.label, 'DEBUG', args));
     }
   }

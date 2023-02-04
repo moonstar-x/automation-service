@@ -6,7 +6,7 @@ import * as GitHub from '../../../clients/github';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
 import { splitArrayByCount } from './../../../utils/array';
-import { discord_webhooks, github } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 12559067;
 const TOP_REFERRER_COUNT = 3;
@@ -46,12 +46,12 @@ export class GitHubRepoStatsWorkflow extends Workflow<void> {
       description: 'Send weekly GitHub insight reports on Discord'
     });
 
-    this.gitHubClient = new GitHub.Client(github.token);
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.github_stats);
+    this.gitHubClient = new GitHub.Client(config.custom.github.token);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.github_stats);
   }
 
   public async run(): Promise<void> {
-    const currentDataByRepo: Record<string, ReducedRepoData> = Object.fromEntries(await Promise.all(github.stats_repos.map(async (repo) => {
+    const currentDataByRepo: Record<string, ReducedRepoData> = Object.fromEntries(await Promise.all(config.custom.github.stats_repos.map(async (repo) => {
       return [repo, this.reduceCompleteRepoData(await this.getCompleteRepoData(repo))];
     })));
     const storedDataByRepo = (await levelDatabaseService.get<Record<string, Partial<ReducedRepoData>>>('github:stats')) ?? {};

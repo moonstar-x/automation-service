@@ -1,11 +1,8 @@
 import path from 'path';
 import { Application } from './Application';
-import { validateConfig, BaseConfig } from './utils/config';
-import config from '../config/config.json';
+import { config } from './config';
 
 const main = async () => {
-  validateConfig(config as unknown as BaseConfig);
-
   const app = new Application({
     webhookManager: {
       port: config.webhook_port

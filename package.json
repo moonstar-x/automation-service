@@ -36,7 +36,8 @@
     "humanize-duration": "^3.28.0",
     "level": "^8.0.0",
     "on-finished": "^2.4.1",
-    "twitter-api-v2": "^1.14.1"
+    "twitter-api-v2": "^1.14.1",
+    "yaml": "^2.2.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

@@ -3,7 +3,7 @@ import { Application } from './../../../Application';
 import * as GitHub from '../../../clients/github';
 import * as Twitter from '../../../clients/twitter';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { github, twitter } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 interface WorkflowOptions {
   repos: string[]
@@ -17,15 +17,15 @@ class TweetRepoReleasesWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
   constructor(application: Application, metadata: WorkflowMetadata, options: WorkflowOptions) {
     super(
       application,
-      application.githubTriggerManager.createTrigger(github.token, options.repos, github.events_superset as GitHub.Types.WebhookEventName[]),
+      application.githubTriggerManager.createTrigger(config.custom.github.token, options.repos, config.custom.github.events_superset),
       metadata
     );
 
     this.options = options;
 
     this.twitterClient = new Twitter.ClientV1({
-      appKey: twitter.api_key,
-      appSecret: twitter.api_key_secret
+      appKey: config.custom.twitter.api_key,
+      appSecret: config.custom.twitter.api_key_secret
     });
   }
 
@@ -58,7 +58,7 @@ export class MoonstarTweetRepoReleasesWorkflow extends TweetRepoReleasesWorkflow
       name: 'MoonstarTweetRepoReleasesWorkflow',
       description: 'Tweet of new moonstar-x releases on GitHub to @moonstar_x99'
     }, {
-      repos: github.release_repos['moonstar-x'],
+      repos: config.custom.github.release_repos['moonstar-x'],
       twitterUsername: 'moonstar_x99'
     });
   }
@@ -70,7 +70,7 @@ export class GreencoastStudiosTweetRepoReleasesWorkflow extends TweetRepoRelease
       name: 'GreencoastStudiosTweetRepoReleasesWorkflow',
       description: 'Tweet of new greencoast-studios releases on GitHub to @greencoast_dev'
     }, {
-      repos: github.release_repos['greencoast-studios'],
+      repos: config.custom.github.release_repos['greencoast-studios'],
       twitterUsername: 'greencoast_dev'
     });
   }

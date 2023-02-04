@@ -5,7 +5,7 @@ import * as Twitter from '../../../clients/twitter';
 import { levelDatabaseService } from '../../../services/LevelDatabaseService';
 import { fileSystemService } from '../../../services/FileSystemService';
 import { randomItemFromArray } from './../../../utils/array';
-import { twitter } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 export class TodayIsRobotWorkflow extends Workflow<void> {
   private twitterClient: Twitter.ClientV1;
@@ -17,8 +17,8 @@ export class TodayIsRobotWorkflow extends Workflow<void> {
     });
 
     this.twitterClient = new Twitter.ClientV1({
-      appKey: twitter.api_key,
-      appSecret: twitter.api_key_secret
+      appKey: config.custom.twitter.api_key,
+      appSecret: config.custom.twitter.api_key_secret
     });
   }
 

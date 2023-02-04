@@ -3,7 +3,7 @@ import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import * as WakaTime from '../../../clients/wakatime';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { discord_webhooks, wakatime } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 9093342;
 
@@ -17,8 +17,8 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
       description: 'Send weekly WakaTime coding stats on Discord'
     });
 
-    this.wakaTimeClient = new WakaTime.Client(wakatime.api_key);
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.wakatime_stats);
+    this.wakaTimeClient = new WakaTime.Client(config.custom.wakatime.api_key);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.wakatime_stats);
   }
 
   public async run(): Promise<void> {
@@ -43,7 +43,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
         title: 'Coding stats for this week',
         description: `I have not coded anything during this week. Hopefully next week will be better?`,
         image: {
-          url: wakatime.images.overall_activity
+          url: config.custom.wakatime.images.overall_activity
         },
         footer: {
           text: "This notification has been triggered by moonstar-x's automation service. It is set to run every sunday at night."
@@ -70,7 +70,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
             { name: 'Coding time in best day:', value: `**${stats.best_day!.text}**`, inline: true }
           ],
           image: {
-            url: wakatime.images.overall_activity
+            url: config.custom.wakatime.images.overall_activity
           },
           footer: undefined
         },
@@ -79,7 +79,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
           author: undefined,
           fields: [{ name: 'Projects I worked on this week:', value: this.parseTimeEntries(stats.projects) }],
           image: {
-            url: wakatime.images.coding_activity
+            url: config.custom.wakatime.images.coding_activity
           },
           footer: undefined
         },
@@ -88,7 +88,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
           author: undefined,
           fields: [{ name: 'Languages I used this week:', value: this.parseTimeEntries(stats.languages) }],
           image: {
-            url: wakatime.images.languages
+            url: config.custom.wakatime.images.languages
           },
           footer: undefined
         },
@@ -97,7 +97,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
           author: undefined,
           fields: [{ name: 'Editors I used this week:', value: this.parseTimeEntries(stats.editors) }],
           image: {
-            url: wakatime.images.editors
+            url: config.custom.wakatime.images.editors
           },
           footer: {
             text: "This notification has been triggered by moonstar-x's automation service. It is set to run every sunday at night."

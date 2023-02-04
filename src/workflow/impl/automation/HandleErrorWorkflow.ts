@@ -3,7 +3,7 @@ import { Workflow } from '../../Workflow';
 import { Application, ApplicationEvents } from '../../../Application';
 import { ApplicationEventTrigger } from '../../triggers/ApplicationEventTrigger';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { discord_webhooks } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 16731212;
 const MAX_ERROR_STACK_SIZE = 1000;
@@ -19,7 +19,7 @@ export class HandleErrorWorkflow extends Workflow<TriggerPayload> {
       description: 'Send workflow error notifications on Discord'
     });
 
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.automation_service);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.automation_service);
   }
 
   public async run([workflow, error]: TriggerPayload): Promise<void> {

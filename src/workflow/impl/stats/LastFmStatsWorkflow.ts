@@ -4,7 +4,7 @@ import { Application } from './../../../Application';
 import { CronTrigger } from './../../triggers/CronTrigger';
 import * as LastFm from '../../../clients/lastfm';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { last_fm, discord_webhooks } from '../../../../config/config.json';
+import { config } from '../../../config';
 
 const EMBED_COLOR = 13963271;
 const MAX_ITEMS = 10;
@@ -19,15 +19,15 @@ export class LastFmStatsWorkflow extends Workflow<void> {
       description: 'Send weekly LastFM stats on Discord'
     });
 
-    this.lastFmClient = new LastFm.Client(last_fm.api_key);
-    this.discordWebhookClient = new DiscordWebhook.Client(discord_webhooks.last_fm_stats);
+    this.lastFmClient = new LastFm.Client(config.custom.last_fm.api_key);
+    this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.last_fm_stats);
   }
 
   public async run(): Promise<void> {
-    const profile = await this.lastFmClient.getProfile(last_fm.user);
-    const albums = (await this.lastFmClient.getWeeklyAlbumChart(last_fm.user)).album;
-    const artists = (await this.lastFmClient.getWeeklyArtistChart(last_fm.user)).artist;
-    const tracks = (await this.lastFmClient.getWeeklyTrackChart(last_fm.user)).track;
+    const profile = await this.lastFmClient.getProfile(config.custom.last_fm.user);
+    const albums = (await this.lastFmClient.getWeeklyAlbumChart(config.custom.last_fm.user)).album;
+    const artists = (await this.lastFmClient.getWeeklyArtistChart(config.custom.last_fm.user)).artist;
+    const tracks = (await this.lastFmClient.getWeeklyTrackChart(config.custom.last_fm.user)).track;
 
     const baseEmbed: DiscordWebhook.Types.Embed = {
       color: EMBED_COLOR,
