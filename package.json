@@ -1,7 +1,7 @@
 {
   "name": "automation-service",
   "version": "1.0.0",
-  "description": "A custom automation service to handle some notifications I need.",
+  "description": "A custom automation service to handle some notifications with a Workflow based design.",
   "main": "./build/src/index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ./src/index.ts",
