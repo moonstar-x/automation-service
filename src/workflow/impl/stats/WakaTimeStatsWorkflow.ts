@@ -46,7 +46,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
           url: config.custom.wakatime.images.overall_activity
         },
         footer: {
-          text: "This notification has been triggered by moonstar-x's automation service. It is set to run every sunday at night."
+          text: "This notification has been triggered by moonstar-x's automation service. It is set to run every Sunday at night."
         }
       }]
     };
@@ -100,7 +100,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
             url: config.custom.wakatime.images.editors
           },
           footer: {
-            text: "This notification has been triggered by moonstar-x's automation service. It is set to run every sunday at night."
+            text: "This notification has been triggered by moonstar-x's automation service. It is set to run every Sunday at night."
           }
         }
       ]

@@ -161,7 +161,7 @@ export class GitHubRepoStatsWorkflow extends Workflow<void> {
       }
     };
     embeds[embeds.length - 1].footer = {
-      text: "This notification has been triggered by moonstar-x's automation service. It is set to run every sunday at night."
+      text: "This notification has been triggered by moonstar-x's automation service. It is set to run every Sunday at night."
     };
 
     return {
