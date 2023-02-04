@@ -67,6 +67,7 @@ At a bare minimum, your config should look something like this:
 * `config.service_url` - Set this to the publicly accessible URL for this service. This is necessary for certain things such as the `GitHubTrigger` which registers webhooks on repositories based on this value.
 * `config.webhook_port` - Set this to the port you wish your service to be listening to.
 * `config.webhook_secret` - Set this to a random secret of your choice to allow authenticated webhook calls.
+* `config.enable_twitter_trigger` - Whether the TwitterTrigger should be enabled. This option exists because this trigger needs to make a request to the Twitter API when initializing.
 * `config.disabled_workflows` - This is an array of workflow names that you wish to disable (for whatever reason).
 
 ### Adding Your Own Configuration
