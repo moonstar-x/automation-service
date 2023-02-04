@@ -25,7 +25,7 @@ export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> implement
   }
 
   public async init(): Promise<void> {
-    const currentRules = (await this.client.v2.streamRules()).data;
+    const currentRules = (await this.client.v2.streamRules()).data ?? [];
     const ruleForThisTrigger = currentRules.find((rule) => rule.tag === this.streamValue);
 
     if (!ruleForThisTrigger) {
