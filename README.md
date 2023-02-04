@@ -9,6 +9,7 @@ A custom automation service to handle some notifications with a Workflow based d
 **This service isn't 100% generic and will contain workflow implementations that are meant just for me.**
 
 > **Warning**
+> 
 > If you wish to use this project for yourself, you may need to delete some (if not all) workflow implementations inside the `src/workflow/impl` folder and implement your own workflows. You can check [this](#making-a-workflow) to see how to make your own workflow.
 
 ## Requirements
