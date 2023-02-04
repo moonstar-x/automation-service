@@ -10,6 +10,8 @@ export interface CustomConfig {
     npm_stats: string
     wakatime_stats: string
     github_stats: string
+    league_of_legends_stats_personal: string
+    league_of_legends_stats_shared: string
   }
   last_fm: {
     api_key: string
@@ -43,6 +45,11 @@ export interface CustomConfig {
   }
   league_of_legends: {
     api_key: string
+    summoners_puuid: {
+      moonstar: string
+      minibambu: string
+      lucien: string
+    }
   }
   twitter: {
     api_key: string
