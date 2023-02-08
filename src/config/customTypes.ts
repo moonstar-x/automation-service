@@ -13,6 +13,7 @@ export interface CustomConfig {
     twitter: string
     league_of_legends_stats_personal: string
     league_of_legends_stats_shared: string
+    docker_hub_stats: string
   }
   last_fm: {
     api_key: string
@@ -20,6 +21,12 @@ export interface CustomConfig {
   }
   npm: {
     packages: string[]
+  }
+  docker_hub: {
+    repos: {
+      owner: string
+      image: string
+    }[]
   }
   wakatime: {
     api_key: string
