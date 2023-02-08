@@ -14,6 +14,7 @@ export interface CustomConfig {
     league_of_legends_stats_personal: string
     league_of_legends_stats_shared: string
     docker_hub_stats: string
+    plausible_stats: string
   }
   last_fm: {
     api_key: string
