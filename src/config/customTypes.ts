@@ -16,6 +16,7 @@ export interface CustomConfig {
     docker_hub_stats: string
     plausible_stats: string
     nextcloud_activity: string
+    jenkins_builds: string
   }
   last_fm: {
     api_key: string
