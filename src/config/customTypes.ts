@@ -15,6 +15,7 @@ export interface CustomConfig {
     league_of_legends_stats_shared: string
     docker_hub_stats: string
     plausible_stats: string
+    nextcloud_activity: string
   }
   last_fm: {
     api_key: string
