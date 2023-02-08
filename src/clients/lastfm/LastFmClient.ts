@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import * as Cheerio from 'cheerio';
 import * as Types from './types';
 
 const API_URL = 'https://ws.audioscrobbler.com/2.0';
@@ -63,5 +64,12 @@ export class LastFmClient {
     });
 
     return response.data.weeklytrackchart;
+  }
+
+  async getArtistImageByLastFmPageUrl(lastFmPageUrl: string): Promise<string | null> {
+    const response = await axios.get(lastFmPageUrl);
+    const $ = Cheerio.load(response.data);
+
+    return $('.header-new-background-image')[0]?.attribs?.content ?? null;
   }
 }

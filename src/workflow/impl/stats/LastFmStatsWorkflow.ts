@@ -50,6 +50,13 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     const slicedArtists = artists.slice(0, MAX_ITEMS);
     const slicedTracks = tracks.slice(0, MAX_ITEMS);
 
+    const topArtistUrl = await this.lastFmClient.getArtistImageByLastFmPageUrl(slicedArtists[0].url);
+    if (topArtistUrl) {
+      baseEmbed.thumbnail = {
+        url: topArtistUrl
+      };
+    }
+
     return this.discordWebhookClient.send(this.createStatsPayload(baseEmbed, profile, slicedAlbums, slicedArtists, slicedTracks));
   }
 
@@ -64,10 +71,7 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     };
   }
 
-  private createStatsPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFm.Types.User, albums: LastFm.Types.Album[], artists: LastFm.Types.Artist[], tracks: LastFm.Types.Track[]): DiscordWebhook.Types.WebhookPayload {
-    const mostListenedTrackImages = tracks[0].image;
-    const mostListenedTrackImage = mostListenedTrackImages[mostListenedTrackImages.length - 1]['#text'];
-
+  private createStatsPayload(baseEmbed: DiscordWebhook.Types.Embed, profile: LastFm.Types.User, albums: LastFm.Types.AlbumInChart[], artists: LastFm.Types.ArtistInChart[], tracks: LastFm.Types.TrackInChart[]): DiscordWebhook.Types.WebhookPayload {
     const parsedArtists = artists.reduce((text, artist) => {
       return text.concat(`• **${artist.name}** with **${artist.playcount}** songs played.\n`);
     }, '');
@@ -84,9 +88,6 @@ export class LastFmStatsWorkflow extends Workflow<void> {
       embeds: [{
         ...baseEmbed,
         description: `So far, I have listened to **${profile.playcount}** songs ever since I've started tracking them on Last.FM.`,
-        image: {
-          url: mostListenedTrackImage
-        },
         fields: [
           { name: `Top ${artists.length} artists this week:`, value: parsedArtists },
           { name: `Top ${albums.length} albums this week:`, value: parsedAlbums },

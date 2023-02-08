@@ -1,5 +1,5 @@
 export interface Image {
-  size: 'small' | 'medium' | 'large' | 'extralarge'
+  size: 'small' | 'medium' | 'large' | 'extralarge' | 'mega' | ''
   '#text': string
 }
 
@@ -25,7 +25,7 @@ export interface User {
   type: 'user'
 }
 
-export interface Album {
+export interface AlbumInChart {
   artist: {
     mbid: string
     '#text': string
@@ -40,7 +40,7 @@ export interface Album {
 }
 
 export interface AlbumChart {
-  album: Album[]
+  album: AlbumInChart[]
   '@attr': {
     from: string
     user: string
@@ -48,7 +48,7 @@ export interface AlbumChart {
   }
 }
 
-export interface Artist {
+export interface ArtistInChart {
   mbid: string
   url: string
   name: string
@@ -59,7 +59,7 @@ export interface Artist {
 }
 
 export interface ArtistChart {
-  artist: Artist[]
+  artist: ArtistInChart[]
   '@attr': {
     from: string
     user: string
@@ -67,7 +67,7 @@ export interface ArtistChart {
   }
 }
 
-export interface Track {
+export interface TrackInChart {
   artist: {
     mbid: string
     '#text': string
@@ -83,7 +83,7 @@ export interface Track {
 }
 
 export interface TrackChart {
-  track: Track[]
+  track: TrackInChart[]
   '@attr': {
     from: string
     user: string
