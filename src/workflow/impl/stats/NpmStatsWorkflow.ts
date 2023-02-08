@@ -62,15 +62,16 @@ export class NpmStatsWorkflow extends Workflow<void> {
       const popularityScore = `${Math.floor(info.score.detail.popularity * 100)}%`;
       const maintenanceScore = `${Math.floor(info.score.detail.maintenance * 100)}%`;
 
-      const deltaString = deltaDownloads < 0 ?
-        `📉 ${-deltaDownloads} since last week` :
-        deltaDownloads > 0 ?
-          `📈 ${deltaDownloads} since last week` :
-          '💤 no change since last week';
+      const deltaString = deltaDownloads < 0 ? `${deltaDownloads} 📉` : (deltaDownloads > 0 ? `+${deltaDownloads} 📈` : 'Unchanged 💤');
 
       return {
         name: `${info.collected.metadata.name}@${info.collected.metadata.version}`,
-        value: `**${downloads.downloads}** downloads/week (**${deltaString}**). Score: **${overallScore}** [Q: **${qualityScore}** P: **${popularityScore}** M: **${maintenanceScore}**] ([Package Link](${info.collected.metadata.links.npm}))`
+        value: `
+• This Week: **${downloads.downloads}**
+• Delta: **${deltaString}**
+• Score: **${overallScore}** [Q: **${qualityScore}** P: **${popularityScore}** M: **${maintenanceScore}**]
+• [Package Link](${info.collected.metadata.links.npm})
+`
       };
     });
     
@@ -89,7 +90,7 @@ export class NpmStatsWorkflow extends Workflow<void> {
         },
         fields: [
           ...fields,
-          { name: 'Scores', value: 'Package score is separated by 3 criteria **Q**uality, **P**opularity and **M**aintenance. Overall score is the average of the 3.' }
+          { name: 'Scores', value: 'Package score is separated by three criteria **Q**uality, **P**opularity and **M**aintenance. Overall score is the average of the three.' }
         ]
       }]
     };
