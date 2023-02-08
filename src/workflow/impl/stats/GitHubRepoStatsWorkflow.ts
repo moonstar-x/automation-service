@@ -174,6 +174,6 @@ export class GitHubRepoStatsWorkflow extends Workflow<void> {
   }
 
   private getDeltaString(delta: number): string {
-    return delta < 0 ? `-${delta} 📉` : (delta > 0 ? `+${delta} 📈` : 'Unchanged 💤');
+    return delta < 0 ? `${delta} 📉` : (delta > 0 ? `+${delta} 📈` : 'Unchanged 💤');
   }
 }
