@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+/* eslint-disable max-statements */
 /* eslint-disable max-len */
 import { Workflow, WorkflowMetadata } from '../../Workflow';
 import { Application } from './../../../Application';
@@ -50,7 +52,17 @@ class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
       return;
     }
 
-    await this.discordWebhookClient.send(this.createMatchesPayload(summoner, newMatches, profileIconUrl));
+    const matchesPayload = this.createMatchesPayload(summoner, newMatches, profileIconUrl);
+    const matchesSummaryPayload = this.createMatchesSummaryPayload(summoner, newMatches);
+
+    if (matchesSummaryPayload) {
+      this.updateFooterInWebhookPayload(matchesSummaryPayload);
+      await this.discordWebhookClient.send(matchesPayload);
+      await this.discordWebhookClient.send(matchesSummaryPayload);
+    } else {
+      this.updateFooterInWebhookPayload(matchesPayload);
+      await this.discordWebhookClient.send(matchesPayload);
+    }
 
     const matchIdsToStore = lastMatches.map((match) => match.metadata.matchId);
     await levelDatabaseService.set(this.options.nameInDb, matchIdsToStore);
@@ -93,9 +105,6 @@ class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
         url: profileIconUrl
       },
       footer: undefined
-    };
-    matchEmbeds[matchEmbeds.length - 1].footer = {
-      text: "This notification has been triggered by moonstar-x's automation service."
     };
 
     return {
@@ -149,6 +158,61 @@ class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
         { name: 'Vision', value: formattedVision, inline: true }
       ]
     };
+  }
+
+  private createMatchesSummaryPayload(summoner: LeagueOfLegends.Types.Summoner, matches: LeagueOfLegends.Types.Match[]): DiscordWebhook.Types.WebhookPayload | null {
+    const rivalChampionCounts = this.getRivalChampionCount(matches);
+    const formattedRivalChampionCounts = Object.keys(rivalChampionCounts).length ?
+      Object.entries(rivalChampionCounts)
+        .reduce((text, [champion, frequency]) => {
+          return text.concat(`${champion}: **${frequency}**\n`);
+        }, '') :
+      null;
+
+    const fields: DiscordWebhook.Types.EmbedField[] = [];
+    if (formattedRivalChampionCounts) {
+      fields.push({ name: 'Rival Champions Fought', value: formattedRivalChampionCounts, inline: true });
+    }
+
+    if (!fields.length) {
+      return null;
+    }
+
+    return {
+      embeds: [{
+        title: `Summary of ${summoner.name}'s previously posted ${matches.length} games`,
+        description: `Here's a composite summary of the last ${matches.length} games posted previously.`,
+        color: DEFAULT_EMBED_COLOR,
+        author: undefined,
+        footer: undefined,
+        fields
+      }]
+    };
+  }
+
+  private getRivalChampionCount(matches: LeagueOfLegends.Types.Match[]): Record<string, number> {
+    return matches.reduce((rivalFrequency, match) => {
+      if (match.info.gameMode === 'ARAM') {
+        return rivalFrequency;
+      }
+      
+      const participant = match.info.participants.find((p) => p.puuid === this.options.summonerPuuid)!;
+      if (participant.lane === 'NONE') {
+        return rivalFrequency;
+      }
+
+      const rivals = match.info.participants.filter((r) => r.teamId !== participant.teamId && r.lane === participant.lane);
+      if (!rivals.length) {
+        return rivalFrequency;
+      }
+
+      for (const rival of rivals) {
+        const { championName: rivalChampion } = rival;
+        rivalFrequency[rivalChampion] = (rivalFrequency[rivalChampion] ?? 0) + 1;
+      }
+
+      return rivalFrequency;
+    }, {} as Record<string, number>);
   }
 
   private getFormattedObjectives(destroyed: number, lost: number): string {
@@ -209,6 +273,16 @@ class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
 
   private getOpGgUrl(summonerName: string): string {
     return `https://euw.op.gg/summoner/userName=${encodeURIComponent(summonerName)}`;
+  }
+
+  private updateFooterInWebhookPayload(payload: DiscordWebhook.Types.WebhookPayload): void {
+    if (!payload.embeds) {
+      return;
+    }
+
+    payload.embeds[payload.embeds.length - 1].footer = {
+      text: "This notification has been triggered by moonstar-x's automation service."
+    };
   }
 }
 

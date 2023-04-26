@@ -2,6 +2,7 @@ import * as GitHub from '../clients/github';
 
 export interface CustomConfig {
   discord_webhooks: {
+    workflow_testing: string
     automation_service: string
     ombi_requests: string
     plex_tracker: string
