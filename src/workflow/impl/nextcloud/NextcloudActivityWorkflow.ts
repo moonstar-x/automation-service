@@ -1,9 +1,11 @@
 import { Workflow } from '../../Workflow';
 import { Application } from '../../../Application';
 import * as DiscordWebhook from '../../../clients/discordWebhook';
+import { ExpiringCache } from '../../../utils/cache';
 import { config } from '../../../config';
 
 const EMBED_COLOR = 5989555;
+const CACHE_TTL = 1000 * 60 * 10; // 10 Minutes
 
 interface WebhookPayload {
   eventType: string
@@ -35,6 +37,7 @@ interface WebhookPayload {
 }
 
 export class NextcloudActivityWorkflow extends Workflow<WebhookPayload> {
+  private cache: ExpiringCache<string, boolean>;
   private discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
@@ -43,11 +46,22 @@ export class NextcloudActivityWorkflow extends Workflow<WebhookPayload> {
       description: 'Send Nextcloud activity on Discord'
     });
 
+    this.cache = new ExpiringCache(CACHE_TTL);
     this.discordWebhookClient = new DiscordWebhook.Client(config.custom.discord_webhooks.nextcloud_activity);
   }
 
   public async run(payload: WebhookPayload): Promise<void> {
-    await this.discordWebhookClient.send(this.createPayload(payload));
+    const cacheKey = this.createCacheKeyForPayload(payload);
+
+    if (!this.cache.has(cacheKey)) {
+      await this.discordWebhookClient.send(this.createPayload(payload));
+    }
+    
+    this.cache.set(cacheKey, true);
+  }
+
+  private createCacheKeyForPayload(payload: WebhookPayload): string {
+    return `${payload.workflowFile.displayText}-${payload.workflowFile.url}`;
   }
 
   private createPayload(payload: WebhookPayload): DiscordWebhook.Types.WebhookPayload {
