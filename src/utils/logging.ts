@@ -1,6 +1,6 @@
 import chalk, { Chalk } from 'chalk';
 import util from 'util';
-import { config } from '../config';
+import { config } from '@config/config';
 
 const parseArguments = (args: unknown[]) => {
   return args.map((item) => {

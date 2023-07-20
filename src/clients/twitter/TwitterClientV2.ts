@@ -1,5 +1,5 @@
 import { TwitterApi, TwitterApiOAuth2Init, ApiResponseError, IParsedOAuth2TokenResult, PlaceV1, SendTweetV2Params } from 'twitter-api-v2';
-import { Logger } from '../../utils/logging';
+import { Logger } from '@utils/logging';
 import * as Types from './types';
 
 export class TwitterClientV2 {
@@ -42,7 +42,7 @@ export class TwitterClientV2 {
 
     this.logger.info(`Twitter credentials for ${username} have been refreshed.`);
     onTokenRefreshed(token);
-  
+
     this.userClient = new TwitterApi(token.accessToken);
     return this.userClient.v2.me();
   }

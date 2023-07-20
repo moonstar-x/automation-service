@@ -1,4 +1,4 @@
-import { sameArrays } from './../../utils/array';
+import { sameArrays } from '@utils/array';
 import axios, { AxiosInstance } from 'axios';
 import * as Types from './types';
 

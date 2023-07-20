@@ -1,8 +1,8 @@
 import { TweetV2SingleStreamResult } from 'twitter-api-v2';
-import { Workflow } from '../../Workflow';
-import { Application } from './../../../Application';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 export class SendTweetsToDiscordWorkflow extends Workflow<TweetV2SingleStreamResult> {
   private discordWebhookClient: DiscordWebhook.Client;

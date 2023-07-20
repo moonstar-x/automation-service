@@ -1,5 +1,5 @@
-import { Application, ApplicationEvents } from '../../Application';
-import { Trigger } from '../Trigger';
+import { Application, ApplicationEvents } from '@application/Application';
+import { Trigger } from '@workflow/Trigger';
 
 export class ApplicationEventTrigger<T extends keyof ApplicationEvents> extends Trigger<ApplicationEvents[T]> {
   private application: Application;

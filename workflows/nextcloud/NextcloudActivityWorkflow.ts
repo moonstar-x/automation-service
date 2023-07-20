@@ -1,8 +1,8 @@
-import { Workflow } from '../../Workflow';
-import { Application } from '../../../Application';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { ExpiringCache } from '../../../utils/cache';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { ExpiringCache } from '@utils/cache';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 5989555;
 const CACHE_TTL = 1000 * 60 * 10; // 10 Minutes
@@ -56,7 +56,7 @@ export class NextcloudActivityWorkflow extends Workflow<WebhookPayload> {
     if (!this.cache.has(cacheKey)) {
       await this.discordWebhookClient.send(this.createPayload(payload));
     }
-    
+
     this.cache.set(cacheKey, true);
   }
 

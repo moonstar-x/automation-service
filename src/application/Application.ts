@@ -1,11 +1,11 @@
 import { EventEmitter } from 'events';
-import { Workflow } from './workflow/Workflow';
-import { Logger } from './utils/logging';
-import { WebhookManager, WebhookManagerOptions } from './workflow/triggers/WebhookTrigger';
-import { GitHubTriggerManager } from './workflow/triggers/GitHubTrigger';
-import { TwitterTriggerManager, TwitterTriggerManagerOptions } from './workflow/triggers/TwitterTrigger';
-import { getAllFilesRecursive } from './utils/filesystem';
-import { config } from './config';
+import { Workflow } from '@workflow/Workflow';
+import { Logger } from '@utils/logging';
+import { WebhookManager, WebhookManagerOptions } from '@workflow/triggers/WebhookTrigger';
+import { GitHubTriggerManager } from '@workflow/triggers/GitHubTrigger';
+import { TwitterTriggerManager, TwitterTriggerManagerOptions } from '@workflow/triggers/TwitterTrigger';
+import { getAllFilesRecursive } from '@utils/filesystem';
+import { config } from '@config/config';
 
 export interface ApplicationEvents {
   workflowRegistered: [Workflow<unknown>]

@@ -1,7 +1,7 @@
-import { Workflow } from '../../Workflow';
-import { Application } from '../../../Application';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 15048717;
 

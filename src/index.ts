@@ -1,6 +1,6 @@
 import path from 'path';
-import { Application } from './Application';
-import { config } from './config';
+import { Application } from '@application/Application';
+import { config } from '@config/config';
 
 const main = async () => {
   const app = new Application({
@@ -15,7 +15,7 @@ const main = async () => {
 
   await app.twitterTriggerManager?.prepare();
 
-  await app.registerWorkflowsIn(path.join(__dirname, './workflow/impl'));
+  await app.registerWorkflowsIn(path.join(__dirname, '../workflows'));
 
   await app.githubTriggerManager.start();
   await app.twitterTriggerManager?.start();

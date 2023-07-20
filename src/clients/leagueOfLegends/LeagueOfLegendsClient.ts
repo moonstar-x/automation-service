@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { batchPromises } from '../../utils/promises';
+import { batchPromises } from '@utils/promises';
 import * as Types from './types';
 
 const getApiBaseUrl = (region: Types.ApiRegion | Types.ApiMatchRegion) => {

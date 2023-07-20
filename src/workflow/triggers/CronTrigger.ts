@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import { Trigger } from '../Trigger';
+import { Trigger } from '@workflow/Trigger';
 
 export class CronTrigger extends Trigger<void> {
   private cron: CronJob;

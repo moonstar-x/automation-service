@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import onFinished from 'on-finished';
-import { Logger } from '../../utils/logging';
+import { Logger } from '@utils/logging';
 
 export const logRequests = (logger: Logger) => (req: Request, res: Response, next: NextFunction) => {
   onFinished(res, (_, res) => {

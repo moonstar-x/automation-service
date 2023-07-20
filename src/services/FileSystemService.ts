@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import fs from 'fs';
 import path from 'path';
-import { isDirectory, createDirectoryIfNoExists } from '../utils/filesystem';
+import { isDirectory, createDirectoryIfNoExists } from '@utils/filesystem';
 
 export interface FileLocation {
   name: string
@@ -28,7 +28,7 @@ export class DirectoryManager {
 
   public async getFiles(): Promise<DirectoryContent> {
     const files = await fs.promises.readdir(this.location, { withFileTypes: true });
-    
+
     return files.reduce((content, file) => {
       const fileLocation: FileLocation = {
         name: file.name,

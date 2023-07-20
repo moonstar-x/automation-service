@@ -2,14 +2,14 @@ import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import HttpStatus from 'http-status-codes';
-import { logRequests } from '../../express/middleware/logging';
-import { handleError } from '../../express/middleware/error';
-import { routeNotFound, onlySupportedMethods, jsonBodyRequired } from '../../express/middleware/route';
-import { verifySecret } from '../../express/middleware/secret';
-import { createSuccessResponse } from '../../express/response';
-import { Logger } from '../../utils/logging';
-import { Trigger } from '../Trigger';
-import { config } from '../../config';
+import { logRequests } from '@express/middleware/logging';
+import { handleError } from '@express/middleware/error';
+import { routeNotFound, onlySupportedMethods, jsonBodyRequired } from '@express/middleware/route';
+import { verifySecret } from '@express/middleware/secret';
+import { createSuccessResponse } from '@express/response';
+import { Logger } from '@utils/logging';
+import { Trigger } from '@workflow/Trigger';
+import { config } from '@config/config';
 
 export interface WebhookTriggerOptions {
   needsPayload?: boolean
@@ -25,7 +25,7 @@ export class WebhookTrigger<T> extends Trigger<T> {
     super();
     this.app = app;
     this.id = id;
-    
+
     this.options = {
       needsPayload: options.needsPayload ?? true,
       needsSecret: options.needsSecret ?? false
@@ -82,7 +82,7 @@ export class WebhookManager {
 
   public start() {
     this.registerLastMiddleware();
-    
+
     this.app.listen(this.options.port, () => {
       this.logger.info(`Webhook HTTP service has started on port ${this.options.port}.`);
     });

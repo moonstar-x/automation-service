@@ -1,14 +1,14 @@
 /* eslint-disable max-lines */
 /* eslint-disable max-statements */
 /* eslint-disable max-len */
-import { Workflow, WorkflowMetadata } from '../../Workflow';
-import { Application } from './../../../Application';
-import { Trigger } from '../../Trigger';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as LeagueOfLegends from '../../../clients/leagueOfLegends';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { config } from '../../../config';
+import { Workflow, WorkflowMetadata } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { Trigger } from '@workflow/Trigger';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as LeagueOfLegends from '@clients/leagueOfLegends';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { config } from '@config/config';
 
 const DEFAULT_EMBED_COLOR = 16775840;
 const EMBED_COLOR_DEFEAT = 16729157;
@@ -195,7 +195,7 @@ class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
       if (match.info.gameMode === 'ARAM') {
         return rivalFrequency;
       }
-      
+
       const participant = match.info.participants.find((p) => p.puuid === this.options.summonerPuuid)!;
       if (participant.lane === 'NONE') {
         return rivalFrequency;

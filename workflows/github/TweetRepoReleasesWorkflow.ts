@@ -1,9 +1,9 @@
-import { Workflow, WorkflowMetadata } from '../../Workflow';
-import { Application } from './../../../Application';
-import * as GitHub from '../../../clients/github';
-import * as Twitter from '../../../clients/twitter';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { config } from '../../../config';
+import { Workflow, WorkflowMetadata } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import * as GitHub from '@clients/github';
+import * as Twitter from '@clients/twitter';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { config } from '@config/config';
 
 interface WorkflowOptions {
   repos: string[]

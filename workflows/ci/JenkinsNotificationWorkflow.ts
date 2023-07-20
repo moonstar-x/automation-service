@@ -1,7 +1,7 @@
-import { Workflow } from '../../Workflow';
-import { Application } from '../../../Application';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 type BuildResult = 'SUCCESS' | 'FAILURE' | 'ABORTED' | 'UNSTABLE';
 

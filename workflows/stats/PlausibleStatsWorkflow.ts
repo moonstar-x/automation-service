@@ -1,9 +1,9 @@
-import { Workflow } from '../../Workflow';
-import { Application } from '../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as Plausible from '../../../clients/plausible';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as Plausible from '@clients/plausible';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 5787884;
 const MAX_ITEMS_PER_BREAKDOWN = 5;
@@ -69,7 +69,7 @@ export class PlausibleStatsWorkflow extends Workflow<void> {
 
           { name: 'Bounce Rate', value: `**${stats.aggregate.bounce_rate.value}%** (${this.getDeltaString(stats.aggregate.bounce_rate.change)})`, inline: true },
           { name: 'Page Views', value: `**${stats.aggregate.pageviews.value}** (${this.getDeltaString(stats.aggregate.pageviews.change)})`, inline: true },
-          
+
           { name: 'Top Pages', value: topPagesText, inline: false },
           { name: 'Top Sources', value: topSourcesText, inline: false },
           { name: 'Top Countries', value: topCountriesText, inline: false },
@@ -91,7 +91,7 @@ export class PlausibleStatsWorkflow extends Workflow<void> {
     embeds[embeds.length - 1].footer = {
       text: "This notification has been triggered by moonstar-x's automation service. It is set to run everyday at night."
     };
-    
+
     return {
       embeds
     };

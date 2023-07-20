@@ -1,4 +1,4 @@
-import { splitArrayByCount } from './array';
+import { splitArrayByCount } from '@utils/array';
 
 export const sleep = (timeMilliseconds: number) => {
   return new Promise((resolve) => {

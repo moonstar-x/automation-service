@@ -1,9 +1,9 @@
 import util from 'util';
-import { Workflow } from '../../Workflow';
-import { Application, ApplicationEvents } from '../../../Application';
-import { ApplicationEventTrigger } from '../../triggers/ApplicationEventTrigger';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application, ApplicationEvents } from '@application/Application';
+import { ApplicationEventTrigger } from '@workflow/triggers/ApplicationEventTrigger';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 16731212;
 const MAX_ERROR_STACK_SIZE = 1000;

@@ -1,7 +1,7 @@
 import express from 'express';
 import { TwitterApi } from 'twitter-api-v2';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { config } from '../../../config';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { config } from '@config/config';
 
 console.warn(`This script requires you to have a special config for Twitter inside custom with the following structure:
 

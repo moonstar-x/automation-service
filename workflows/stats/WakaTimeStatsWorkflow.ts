@@ -1,9 +1,9 @@
-import { Workflow } from '../../Workflow';
-import { Application } from './../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as WakaTime from '../../../clients/wakatime';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as WakaTime from '@clients/wakatime';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 9093342;
 
@@ -23,7 +23,7 @@ export class WakaTimeStatsWorkflow extends Workflow<void> {
 
   public async run(): Promise<void> {
     const stats = await this.wakaTimeClient.getLastWeekStats();
-    
+
     if (!stats) {
       return this.discordWebhookClient.send(this.createEmptyPayload());
     }

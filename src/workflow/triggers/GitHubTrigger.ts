@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import * as GitHub from '../../clients/github';
-import { WebhookTrigger } from './WebhookTrigger';
-import { Trigger } from '../Trigger';
+import * as GitHub from '@clients/github';
+import { WebhookTrigger } from '@workflow/triggers/WebhookTrigger';
+import { Trigger } from '@workflow/Trigger';
 
 export class GitHubTrigger extends Trigger<GitHub.Types.WebhookEvent> {
   private webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>;

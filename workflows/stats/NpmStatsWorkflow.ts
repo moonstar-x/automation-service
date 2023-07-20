@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-import { Workflow } from '../../Workflow';
-import { Application } from './../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as Npm from '../../../clients/npm';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as Npm from '@clients/npm';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 14777974;
 
@@ -31,7 +31,7 @@ export class NpmStatsWorkflow extends Workflow<void> {
       return acc;
     }, {} as Record<string, Npm.Types.NpmPackageDownloads>);
     const downloadComparisonByPackage = await this.getDownloadsComparison(downloadsByPackage);
-    
+
     await this.discordWebhookClient.send(this.createPayload(packagesInfo, downloadsByPackage, downloadComparisonByPackage));
     await this.persistCurrentDownloads(downloadsByPackage);
   }
@@ -74,7 +74,7 @@ export class NpmStatsWorkflow extends Workflow<void> {
 `
       };
     });
-    
+
     return {
       embeds: [{
         color: EMBED_COLOR,

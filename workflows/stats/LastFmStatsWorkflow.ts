@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-import { Workflow } from '../../Workflow';
-import { Application } from './../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as LastFm from '../../../clients/lastfm';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as LastFm from '@clients/lastfm';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 13963271;
 const MAX_ITEMS = 10;
@@ -75,11 +75,11 @@ export class LastFmStatsWorkflow extends Workflow<void> {
     const parsedArtists = artists.reduce((text, artist) => {
       return text.concat(`• **${artist.name}** with **${artist.playcount}** songs played.\n`);
     }, '');
-    
+
     const parsedAlbums = albums.reduce((text, album) => {
       return text.concat(`• **${album.name}** by **${album.artist['#text']}** with **${album.playcount}** songs played.\n`);
     }, '');
-    
+
     const parsedTracks = tracks.reduce((text, track) => {
       return text.concat(`• **${track.name}** by **${track.artist['#text']}** which has been played **${track.playcount}** times.\n`);
     }, '');

@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
-import { Workflow } from '../../Workflow';
-import { Application } from './../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as GitHub from '../../../clients/github';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { splitArrayByCount } from './../../../utils/array';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as GitHub from '@clients/github';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { splitArrayByCount } from '@utils/array';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 12559067;
 const TOP_REFERRER_COUNT = 3;

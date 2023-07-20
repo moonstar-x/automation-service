@@ -1,11 +1,11 @@
 /* eslint-disable max-len */
-import { Workflow } from '../../Workflow';
-import { Application } from '../../../Application';
-import { CronTrigger } from './../../triggers/CronTrigger';
-import * as DockerHub from '../../../clients/dockerhub';
-import * as DiscordWebhook from '../../../clients/discordWebhook';
-import { levelDatabaseService } from '../../../services/LevelDatabaseService';
-import { config } from '../../../config';
+import { Workflow } from '@workflow/Workflow';
+import { Application } from '@application/Application';
+import { CronTrigger } from '@workflow/triggers/CronTrigger';
+import * as DockerHub from '@clients/dockerhub';
+import * as DiscordWebhook from '@clients/discordWebhook';
+import { levelDatabaseService } from '@services/LevelDatabaseService';
+import { config } from '@config/config';
 
 const EMBED_COLOR = 899053;
 
@@ -31,7 +31,7 @@ export class DockerHubStatsWorkflow extends Workflow<void> {
   public async run(): Promise<void> {
     const statsByImage: Record<string, ImageStats> = Object.fromEntries(await Promise.all(config.custom.docker_hub.repos.map(async ({ owner, image }) => {
       const info: DockerHub.Types.RepoData = await this.dockerHubClient.getRepoData(owner, image);
-      
+
       return [`${owner}/${image}`, {
         stars: info.star_count,
         pulls: info.pull_count
@@ -74,7 +74,7 @@ export class DockerHubStatsWorkflow extends Workflow<void> {
         `
       };
     });
-    
+
     return {
       embeds: [{
         color: EMBED_COLOR,
