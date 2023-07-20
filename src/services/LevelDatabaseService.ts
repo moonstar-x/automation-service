@@ -1,8 +1,9 @@
 import { Level } from 'level';
+import ModuleError from 'module-error';
 import path from 'path';
 
 export class LevelDatabaseService {
-  private db: Level<string, any>;
+  private db: Level<string, unknown>;
 
   constructor(location: string) {
     this.db = new Level(location, {
@@ -13,8 +14,8 @@ export class LevelDatabaseService {
   public async get<T>(key: string): Promise<T | null> {
     try {
       return await this.db.get(key) as T;
-    } catch (error: any) {
-      if (error.code === 'LEVEL_NOT_FOUND') {
+    } catch (error) {
+      if ((error as ModuleError).code === 'LEVEL_NOT_FOUND') {
         return null;
       }
 

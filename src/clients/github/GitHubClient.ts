@@ -55,7 +55,7 @@ export class GitHubClient {
   public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEventName[]): Promise<void> {
     const webhooks = (await this.rest.get(`/repos/${repo}/hooks`)).data;
 
-    const webhookToOverwrite = webhooks.find((hook: any) => {
+    const webhookToOverwrite = webhooks.find((hook: Types.RepoHook) => {
       return hook.config?.url === url &&
         hook.config?.content_type === 'json' &&
         hook.config?.insecure_ssl === '1';

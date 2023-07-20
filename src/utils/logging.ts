@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import chalk, { Chalk } from 'chalk';
 import util from 'util';
 import { config } from '@config/config';
