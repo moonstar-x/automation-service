@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import { Trigger, Clearable } from '@workflow/Trigger';
 
 export class TimeoutTrigger extends Trigger<void> implements Clearable {

@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import { Workflow } from '@workflow/Workflow';
 import { Application } from '@application/Application';
 import { CronTrigger } from '@workflow/triggers/CronTrigger';

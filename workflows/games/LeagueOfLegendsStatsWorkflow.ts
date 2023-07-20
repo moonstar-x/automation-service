@@ -1,6 +1,3 @@
-/* eslint-disable max-lines */
-/* eslint-disable max-statements */
-/* eslint-disable max-len */
 import { Workflow, WorkflowMetadata } from '@workflow/Workflow';
 import { Application } from '@application/Application';
 import { Trigger } from '@workflow/Trigger';

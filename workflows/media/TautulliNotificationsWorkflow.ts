@@ -1,4 +1,3 @@
-/* eslint-disable max-statements */
 import { Workflow } from '@workflow/Workflow';
 import { Application } from '@application/Application';
 import * as DiscordWebhook from '@clients/discordWebhook';

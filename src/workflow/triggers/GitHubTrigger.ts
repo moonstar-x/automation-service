@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import * as GitHub from '@clients/github';
 import { WebhookTrigger } from '@workflow/triggers/WebhookTrigger';
 import { Trigger } from '@workflow/Trigger';

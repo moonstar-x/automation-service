@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import axios, { AxiosInstance } from 'axios';
 import * as Types from './types';
 
