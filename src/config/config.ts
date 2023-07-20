@@ -46,11 +46,11 @@ const loadConfig = (location: string): Config => {
   const content = fs.readFileSync(location, {
     encoding: 'utf-8'
   });
-  
+
   const config: Config = YAML.parse(content);
   validateBaseConfig(config);
 
   return config;
 };
 
-export const config = loadConfig(path.join(__dirname, '../../config/config.yml'));
+export const config = loadConfig(path.join(process.cwd(), 'config', 'config.yml'));

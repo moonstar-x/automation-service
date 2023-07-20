@@ -19,8 +19,12 @@
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"],
       "@workflow/*": ["src/workflow/*"],
-      "@workflows/*": ["workflows/*"],
+      "@workflows/*": ["workflows/*"]
     },
+
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ],
 
     "target": "ES2016",
     "module": "CommonJS",
