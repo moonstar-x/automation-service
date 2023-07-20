@@ -6,7 +6,7 @@ import { CustomConfig } from './customTypes';
 export interface BaseConfig {
   debug: boolean
   service_url: string
-  webhook_port: number
+  http_port: number
   webhook_secret: string
   enable_twitter_trigger: boolean
   disabled_workflows: string[]
@@ -16,7 +16,11 @@ export interface Config extends BaseConfig {
   custom: CustomConfig
 }
 
-const validateBaseConfig = (config: BaseConfig) => {
+type RawBaseConfig = {
+  [k in keyof BaseConfig]: BaseConfig[k] | undefined
+}
+
+const validateBaseConfig = (config: RawBaseConfig) => {
   if (typeof config.debug !== 'boolean') {
     throw new TypeError('config.debug must be a boolean.');
   }
@@ -25,8 +29,8 @@ const validateBaseConfig = (config: BaseConfig) => {
     throw new TypeError('config.service_url must be a string.');
   }
 
-  if (isNaN(config.webhook_port)) {
-    throw new TypeError('config.webhook_port must be a number.');
+  if (isNaN(config.http_port!)) {
+    throw new TypeError('config.http_port must be a number.');
   }
 
   if (typeof config.webhook_secret !== 'string') {

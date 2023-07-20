@@ -4,7 +4,7 @@
   "description": "A custom automation service to handle some notifications with a Workflow based design.",
   "main": "./build/src/index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --exec 'ts-node -C ts-patch/compiler ./src/index.ts'",
+    "dev": "cross-env NODE_ENV=development nodemon -e ts --exec 'ts-node -C ts-patch/compiler ./src/index.ts'",
     "lint": "eslint ./src --ext .ts",
     "lint:fix": "eslint ./src --ext .ts --fix",
     "clean": "rimraf ./build",

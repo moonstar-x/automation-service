@@ -1,13 +1,8 @@
-import express, { Express, Request, Response } from 'express';
-import bodyParser from 'body-parser';
-import cors from 'cors';
+import { Express, Request, Response } from 'express';
 import HttpStatus from 'http-status-codes';
-import { logRequests } from '@express/middleware/logging';
-import { handleError } from '@express/middleware/error';
-import { routeNotFound, onlySupportedMethods, jsonBodyRequired } from '@express/middleware/route';
+import { onlySupportedMethods, jsonBodyRequired } from '@express/middleware/route';
 import { verifySecret } from '@express/middleware/secret';
 import { createSuccessResponse } from '@express/response';
-import { Logger } from '@utils/logging';
 import { Trigger } from '@workflow/Trigger';
 import { config } from '@config/config';
 
@@ -50,42 +45,13 @@ export class WebhookTrigger<T> extends Trigger<T> {
   }
 }
 
-export interface WebhookManagerOptions {
-  port: number
-}
-
 export class WebhookManager {
-  private options: WebhookManagerOptions;
-  private app: Express;
-  private logger: Logger;
-  private triggers: Map<string, WebhookTrigger<unknown>>;
+  private readonly app: Express;
+  private readonly triggers: Map<string, WebhookTrigger<unknown>>;
 
-  constructor(options: WebhookManagerOptions) {
-    this.options = options;
-    this.app = express();
-    this.logger = new Logger('WebhookManager');
+  constructor(app: Express) {
+    this.app = app;
     this.triggers = new Map<string, WebhookTrigger<unknown>>();
-    this.registerMiddleware();
-  }
-
-  private registerMiddleware() {
-    this.app.use(bodyParser.json());
-    this.app.use(cors());
-    this.app.use(logRequests(this.logger));
-    this.app.options('*', cors());
-  }
-
-  private registerLastMiddleware() {
-    this.app.all('*', routeNotFound);
-    this.app.use(handleError(this.logger));
-  }
-
-  public start() {
-    this.registerLastMiddleware();
-
-    this.app.listen(this.options.port, () => {
-      this.logger.info(`Webhook HTTP service has started on port ${this.options.port}.`);
-    });
   }
 
   public createTrigger<T>(id: string, options: WebhookTriggerOptions = {}): WebhookTrigger<T> {

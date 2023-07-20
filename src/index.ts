@@ -4,8 +4,8 @@ import { config } from '@config/config';
 
 const main = async () => {
   const app = new Application({
-    webhookManager: {
-      port: config.webhook_port
+    httpServerOptions: {
+      port: config.http_port
     },
     twitterTriggerManager: {
       bearerToken: config.custom.twitter?.bearer_token as string,
@@ -19,7 +19,7 @@ const main = async () => {
 
   await app.githubTriggerManager.start();
   await app.twitterTriggerManager?.start();
-  app.webhookManager.start();
+  app.httpServer.start();
 };
 
 main();
