@@ -1,14 +1,13 @@
 # Build Stage
 FROM node:16.15.1-alpine AS build
 
-WORKDIR /tmp/build
+WORKDIR /tmp/app-build
 COPY package*.json ./
 
 RUN npm ci
 
 COPY . .
 RUN npm run build
-RUN rm -rf src
 
 # Image
 FROM node:16.15.1-alpine
@@ -28,8 +27,8 @@ WORKDIR /opt/app
 COPY package*.json ./
 
 RUN npm ci --only=prod
-COPY --from=build /tmp/build ./
+COPY --from=build /tmp/app-build/build ./
 
 ENV NODE_ENV=production
 
-CMD ["node", "./build/src/index.js"]
+CMD ["node", "./src/index.js"]
