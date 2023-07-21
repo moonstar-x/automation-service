@@ -16,6 +16,7 @@
       "@clients/*": ["src/clients/*"],
       "@config/*": ["src/config/*"],
       "@express/*": ["src/express/*"],
+      "@oauth/*": ["src/oauth/*"],
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"],
       "@workflow/*": ["src/workflow/*"],
