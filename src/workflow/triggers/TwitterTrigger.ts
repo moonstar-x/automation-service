@@ -1,16 +1,16 @@
 import { TwitterApi, TweetStream, TweetV2SingleStreamResult, ETwitterStreamEvent } from 'twitter-api-v2';
-import { Logger } from '../../utils/logging';
-import { Trigger } from '../Trigger';
+import { Logger } from '@utils/logging';
+import { Trigger } from '@workflow/Trigger';
 
 export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> {
-  private client: TwitterApi;
-  private logger: Logger;
+  private readonly client: TwitterApi;
+  private readonly logger: Logger;
   public readonly usernamesToFollow: string[];
-  private enabled: boolean;
+  private readonly enabled: boolean;
 
   constructor(client: TwitterApi, enabled: boolean, usernamesToFollow: string[]) {
     super();
-    
+
     if (!usernamesToFollow.length) {
       throw new Error('At least one user needs to be followed.');
     }
@@ -39,7 +39,7 @@ export class TwitterTrigger extends Trigger<TweetV2SingleStreamResult> {
           return { value: `from:${username}`, tag: username };
         })
       });
-  
+
       this.logger.debug('Added the following rules:', setRules);
     }
   }
@@ -51,11 +51,11 @@ export interface TwitterTriggerManagerOptions {
 }
 
 export class TwitterTriggerManager {
-  private client: TwitterApi;
+  private readonly client: TwitterApi;
   private stream: TweetStream<TweetV2SingleStreamResult> | null;
-  private logger: Logger;
-  private triggers: TwitterTrigger[];
-  private enabled: boolean;
+  private readonly logger: Logger;
+  private readonly triggers: TwitterTrigger[];
+  private readonly enabled: boolean;
 
   constructor(options: TwitterTriggerManagerOptions) {
     this.client = new TwitterApi(options.bearerToken);

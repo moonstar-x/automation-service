@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
-import { Trigger, Clearable } from '../Trigger';
+import { Trigger, Clearable } from '@workflow/Trigger';
 
 export class IntervalTrigger extends Trigger<void> implements Clearable {
   private handler: NodeJS.Timer | null;
-  private interval: number;
+  private readonly interval: number;
 
   constructor(intervalSeconds: number) {
     super();

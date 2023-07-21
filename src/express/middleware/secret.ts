@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { UnauthorizedRequestError } from '../errors';
-import { config } from '../../config';
+import { UnauthorizedRequestError } from '@express/errors';
+import { config } from '@config/config';
 
 export const verifySecret = (required: boolean) => (req: Request, _res: Response, next: NextFunction) => {
   if (!required) {

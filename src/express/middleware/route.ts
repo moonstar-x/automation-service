@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { MethodNotAllowedError, ResourceNotFoundError, BadRequestError } from '../errors';
+import { MethodNotAllowedError, ResourceNotFoundError, BadRequestError } from '@express/errors';
 
 type HTTP_METHODS = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD';
 

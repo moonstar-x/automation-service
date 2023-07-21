@@ -1,13 +1,12 @@
-/* eslint-disable max-len */
-import * as GitHub from '../../clients/github';
-import { WebhookTrigger } from './WebhookTrigger';
-import { Trigger } from '../Trigger';
+import * as GitHub from '@clients/github';
+import { WebhookTrigger } from '@workflow/triggers/WebhookTrigger';
+import { Trigger } from '@workflow/Trigger';
 
 export class GitHubTrigger extends Trigger<GitHub.Types.WebhookEvent> {
-  private webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>;
-  private client: GitHub.Client;
-  private repos: string[];
-  private events: GitHub.Types.WebhookEventName[];
+  private readonly webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>;
+  private readonly client: GitHub.Client;
+  private readonly repos: string[];
+  private readonly events: GitHub.Types.WebhookEventName[];
 
   constructor(webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>, githubClientToken: string, repos: string[], events: GitHub.Types.WebhookEventName[]) {
     super();
@@ -35,7 +34,7 @@ export class GitHubTrigger extends Trigger<GitHub.Types.WebhookEvent> {
 }
 
 export class GitHubTriggerManager {
-  private webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>;
+  private readonly webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>;
 
   constructor(webhookTrigger: WebhookTrigger<GitHub.Types.WebhookEvent>) {
     this.webhookTrigger = webhookTrigger;

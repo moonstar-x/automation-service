@@ -4,6 +4,7 @@
 # Allow the public project files.
 !config/config.sample.yml
 !src
+!workflows
 !Dockerfile
 !LICENSE
 !package*.json

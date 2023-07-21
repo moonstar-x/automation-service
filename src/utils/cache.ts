@@ -4,8 +4,8 @@ export type ExpiringCacheValue<T> = {
 };
 
 export class ExpiringCache<K, V> {
-  private map: Map<K, ExpiringCacheValue<V>>;
-  private ttl: number;
+  private readonly map: Map<K, ExpiringCacheValue<V>>;
+  private readonly ttl: number;
 
   constructor(ttl: number) {
     this.map = new Map();

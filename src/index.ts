@@ -1,11 +1,11 @@
 import path from 'path';
-import { Application } from './Application';
-import { config } from './config';
+import { Application } from '@application/Application';
+import { config } from '@config/config';
 
 const main = async () => {
   const app = new Application({
-    webhookManager: {
-      port: config.webhook_port
+    httpServerOptions: {
+      port: config.http_port
     },
     twitterTriggerManager: {
       bearerToken: config.custom.twitter?.bearer_token as string,
@@ -15,11 +15,11 @@ const main = async () => {
 
   await app.twitterTriggerManager?.prepare();
 
-  await app.registerWorkflowsIn(path.join(__dirname, './workflow/impl'));
+  await app.registerWorkflowsIn(path.join(path.join(process.cwd(), 'workflows')));
 
   await app.githubTriggerManager.start();
   await app.twitterTriggerManager?.start();
-  app.webhookManager.start();
+  app.httpServer.start();
 };
 
 main();

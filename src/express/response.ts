@@ -1,4 +1,4 @@
-import { HttpError } from './errors';
+import { HttpError } from '@express/errors';
 
 export interface Response {
   message: string

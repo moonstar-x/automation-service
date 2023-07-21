@@ -4,7 +4,7 @@ import * as Types from './types';
 const API_URL = 'https://wakatime.com/api/v1';
 
 export class WakaTimeClient {
-  private rest: AxiosInstance;
+  private readonly rest: AxiosInstance;
 
   constructor(apiKey: string) {
     this.rest = axios.create({

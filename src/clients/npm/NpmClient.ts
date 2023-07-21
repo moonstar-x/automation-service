@@ -5,8 +5,8 @@ const NPMS_API_URL = 'https://api.npms.io/v2';
 const NPM_API_URL = 'https://api.npmjs.org';
 
 export class NpmClient {
-  private npmsRest: AxiosInstance;
-  private npmRest: AxiosInstance;
+  private readonly npmsRest: AxiosInstance;
+  private readonly npmRest: AxiosInstance;
 
   constructor() {
     this.npmsRest = axios.create({

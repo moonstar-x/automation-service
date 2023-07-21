@@ -4,7 +4,7 @@ import * as Types from './types';
 const API_URL = 'https://hub.docker.com/v2';
 
 export class DockerHubClient {
-  private rest: AxiosInstance;
+  private readonly rest: AxiosInstance;
 
   constructor() {
     this.rest = axios.create({
@@ -14,7 +14,7 @@ export class DockerHubClient {
 
   public async getRepoData(owner: string | null, image: string): Promise<Types.RepoData> {
     const repo = owner ? `${owner}/${image}` : `library/${image}`;
-    
+
     const response = await this.rest.get(`/repositories/${repo}`);
     return response.data;
   }

@@ -1,5 +1,8 @@
 {
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "workflows/**/*"
+  ],
   "exclude": [
     "build",
     "node_modules",
@@ -7,6 +10,23 @@
   ],
 
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@application/*": ["src/application/*"],
+      "@clients/*": ["src/clients/*"],
+      "@config/*": ["src/config/*"],
+      "@express/*": ["src/express/*"],
+      "@oauth/*": ["src/oauth/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"],
+      "@workflow/*": ["src/workflow/*"],
+      "@workflows/*": ["workflows/*"]
+    },
+
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ],
+
     "target": "ES2016",
     "module": "CommonJS",
     "allowJs": false,

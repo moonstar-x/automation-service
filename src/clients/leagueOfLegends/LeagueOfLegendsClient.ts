@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { batchPromises } from '../../utils/promises';
+import { batchPromises } from '@utils/promises';
 import * as Types from './types';
 
 const getApiBaseUrl = (region: Types.ApiRegion | Types.ApiMatchRegion) => {
@@ -9,8 +9,8 @@ const getApiBaseUrl = (region: Types.ApiRegion | Types.ApiMatchRegion) => {
 const DATA_DRAGON_VERSION_URL = 'https://ddragon.leagueoflegends.com/api/versions.json';
 
 export class LeagueOfLegendsClient {
-  private apiRest: AxiosInstance;
-  private matchRest: AxiosInstance;
+  private readonly apiRest: AxiosInstance;
+  private readonly matchRest: AxiosInstance;
 
   constructor(apiKey: string, apiRegion: Types.ApiRegion, matchRegion: Types.ApiMatchRegion) {
     this.apiRest = axios.create({

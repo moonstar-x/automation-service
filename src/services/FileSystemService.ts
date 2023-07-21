@@ -1,7 +1,6 @@
-/* eslint-disable no-use-before-define */
 import fs from 'fs';
 import path from 'path';
-import { isDirectory, createDirectoryIfNoExists } from '../utils/filesystem';
+import { isDirectory, createDirectoryIfNoExists } from '@utils/filesystem';
 
 export interface FileLocation {
   name: string
@@ -14,8 +13,8 @@ export interface DirectoryContent {
 }
 
 export class DirectoryManager {
-  private service: FileSystemService;
-  private location: string;
+  private readonly service: FileSystemService;
+  private readonly location: string;
 
   constructor(service: FileSystemService, location: string) {
     if (!isDirectory(location)) {
@@ -28,7 +27,7 @@ export class DirectoryManager {
 
   public async getFiles(): Promise<DirectoryContent> {
     const files = await fs.promises.readdir(this.location, { withFileTypes: true });
-    
+
     return files.reduce((content, file) => {
       const fileLocation: FileLocation = {
         name: file.name,
@@ -71,8 +70,8 @@ export class DirectoryManager {
 }
 
 export class FileSystemService {
-  private directory: DirectoryManager;
-  private location: string;
+  private readonly directory: DirectoryManager;
+  private readonly location: string;
 
   constructor(absoluteLocation: string) {
     createDirectoryIfNoExists(absoluteLocation);
@@ -93,4 +92,4 @@ export class FileSystemService {
   }
 }
 
-export const fileSystemService = new FileSystemService(path.join(__dirname, '../../data/fs'));
+export const fileSystemService = new FileSystemService(path.join(process.cwd(), 'data', 'fs'));

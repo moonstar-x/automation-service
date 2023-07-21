@@ -1,9 +1,8 @@
-/* eslint-disable max-len */
 import axios, { AxiosInstance } from 'axios';
 import * as Types from './types';
 
 export class PlausibleClient {
-  private rest: AxiosInstance;
+  private readonly rest: AxiosInstance;
 
   constructor(baseUrl: string, apiKey: string) {
     this.rest = axios.create({

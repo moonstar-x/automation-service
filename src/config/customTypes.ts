@@ -1,4 +1,4 @@
-import * as GitHub from '../clients/github';
+import * as GitHub from '@clients/github';
 
 export interface CustomConfig {
   discord_webhooks: {

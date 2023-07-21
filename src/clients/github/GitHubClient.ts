@@ -1,11 +1,11 @@
-import { sameArrays } from './../../utils/array';
+import { sameArrays } from '@utils/array';
 import axios, { AxiosInstance } from 'axios';
 import * as Types from './types';
 
 const API_URL = 'https://api.github.com';
 
 export class GitHubClient {
-  private rest: AxiosInstance;
+  private readonly rest: AxiosInstance;
 
   constructor(token: string) {
     this.rest = axios.create({
@@ -55,7 +55,7 @@ export class GitHubClient {
   public async postWebhookForRepo(repo: string, url: string, events: Types.WebhookEventName[]): Promise<void> {
     const webhooks = (await this.rest.get(`/repos/${repo}/hooks`)).data;
 
-    const webhookToOverwrite = webhooks.find((hook: any) => {
+    const webhookToOverwrite = webhooks.find((hook: Types.RepoHook) => {
       return hook.config?.url === url &&
         hook.config?.content_type === 'json' &&
         hook.config?.insecure_ssl === '1';

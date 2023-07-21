@@ -1,9 +1,8 @@
-/* eslint-disable no-undef */
-import { Trigger, Clearable } from '../Trigger';
+import { Trigger, Clearable } from '@workflow/Trigger';
 
 export class TimeoutTrigger extends Trigger<void> implements Clearable {
   private handler: NodeJS.Timeout | null;
-  private timeout: number;
+  private readonly timeout: number;
 
   constructor(timeoutSeconds: number) {
     super();

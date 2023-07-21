@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import chalk, { Chalk } from 'chalk';
 import util from 'util';
-import { config } from '../config';
+import { config } from '@config/config';
 
 const parseArguments = (args: unknown[]) => {
   return args.map((item) => {
@@ -17,7 +18,7 @@ const prepareMessage = (chalkStyle: Chalk, label: string, level: string, args: u
 };
 
 export class Logger {
-  private label: string;
+  private readonly label: string;
 
   constructor(label: string) {
     this.label = label;

@@ -1,3 +1,5 @@
+import { WebhookEventName } from '@octokit/webhooks-types';
+
 export { WebhookEvent, WebhookEventName } from '@octokit/webhooks-types';
 
 export interface RepoData {
@@ -169,4 +171,15 @@ export interface RepoPageViews {
   count: number
   uniques: number
   views: RepoPageView[]
+}
+
+export interface RepoHook {
+  name: string
+  config?: {
+    url: string
+    content_type: 'json' | string
+    insecure_ssl: '1' | '0'
+  },
+  events: WebhookEventName[]
+  active: boolean
 }
