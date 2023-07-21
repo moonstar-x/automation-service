@@ -9,8 +9,8 @@ import { config } from '@config/config';
 const EMBED_COLOR = 14777974;
 
 export class NpmStatsWorkflow extends Workflow<void> {
-  private npmClient: Npm.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly npmClient: Npm.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {

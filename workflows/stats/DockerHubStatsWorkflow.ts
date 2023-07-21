@@ -14,8 +14,8 @@ interface ImageStats {
 }
 
 export class DockerHubStatsWorkflow extends Workflow<void> {
-  private dockerHubClient: DockerHub.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly dockerHubClient: DockerHub.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {

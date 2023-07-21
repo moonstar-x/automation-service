@@ -8,8 +8,8 @@ import { config } from '@config/config';
 const EMBED_COLOR = 9093342;
 
 export class WakaTimeStatsWorkflow extends Workflow<void> {
-  private wakaTimeClient: WakaTime.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly wakaTimeClient: WakaTime.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {

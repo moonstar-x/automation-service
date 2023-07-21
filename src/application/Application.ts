@@ -30,8 +30,8 @@ export interface ApplicationOptions {
 }
 
 export class Application extends EventEmitter {
-  private workflows: Map<string, Workflow<unknown>>;
-  private logger: Logger;
+  private readonly workflows: Map<string, Workflow<unknown>>;
+  private readonly logger: Logger;
 
   public readonly httpServer: ExpressServer;
   public readonly oauthManager: OAuthManager;

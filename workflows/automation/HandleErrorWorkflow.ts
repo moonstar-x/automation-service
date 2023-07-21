@@ -11,7 +11,7 @@ const MAX_ERROR_STACK_SIZE = 1000;
 type TriggerPayload = ApplicationEvents['workflowError'];
 
 export class HandleErrorWorkflow extends Workflow<TriggerPayload> {
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new ApplicationEventTrigger(application, 'workflowError'), {

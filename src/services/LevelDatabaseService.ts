@@ -3,7 +3,7 @@ import ModuleError from 'module-error';
 import path from 'path';
 
 export class LevelDatabaseService {
-  private db: Level<string, unknown>;
+  private readonly db: Level<string, unknown>;
 
   constructor(location: string) {
     this.db = new Level(location, {

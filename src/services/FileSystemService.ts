@@ -13,8 +13,8 @@ export interface DirectoryContent {
 }
 
 export class DirectoryManager {
-  private service: FileSystemService;
-  private location: string;
+  private readonly service: FileSystemService;
+  private readonly location: string;
 
   constructor(service: FileSystemService, location: string) {
     if (!isDirectory(location)) {
@@ -70,8 +70,8 @@ export class DirectoryManager {
 }
 
 export class FileSystemService {
-  private directory: DirectoryManager;
-  private location: string;
+  private readonly directory: DirectoryManager;
+  private readonly location: string;
 
   constructor(absoluteLocation: string) {
     createDirectoryIfNoExists(absoluteLocation);

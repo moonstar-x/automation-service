@@ -5,7 +5,7 @@ import * as DiscordWebhook from '@clients/discordWebhook';
 import { config } from '@config/config';
 
 export class SendTweetsToDiscordWorkflow extends Workflow<TweetV2SingleStreamResult> {
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.twitterTriggerManager!.createTrigger(['moonstar_x99']), {

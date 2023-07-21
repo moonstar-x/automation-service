@@ -9,8 +9,8 @@ const EMBED_COLOR = 13963271;
 const MAX_ITEMS = 10;
 
 export class LastFmStatsWorkflow extends Workflow<void> {
-  private lastFmClient: LastFm.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly lastFmClient: LastFm.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {

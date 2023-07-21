@@ -18,7 +18,7 @@ const prepareMessage = (chalkStyle: Chalk, label: string, level: string, args: u
 };
 
 export class Logger {
-  private label: string;
+  private readonly label: string;
 
   constructor(label: string) {
     this.label = label;

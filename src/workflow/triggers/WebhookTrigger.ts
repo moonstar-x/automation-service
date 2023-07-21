@@ -12,9 +12,9 @@ export interface WebhookTriggerOptions {
 }
 
 export class WebhookTrigger<T> extends Trigger<T> {
-  private app: Express;
+  private readonly app: Express;
   public readonly id: string;
-  private options: Required<WebhookTriggerOptions>;
+  private readonly options: Required<WebhookTriggerOptions>;
 
   constructor(app: Express, id: string, options: WebhookTriggerOptions) {
     super();

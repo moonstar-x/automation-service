@@ -21,7 +21,7 @@ interface TriggerPayload {
 }
 
 export class OmbiRequestsWorkflow extends Workflow<TriggerPayload> {
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('ombi', { needsSecret: true }), {

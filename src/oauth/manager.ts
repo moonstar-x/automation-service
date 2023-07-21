@@ -4,7 +4,7 @@ import * as strategyConstructors from '@oauth/strategies';
 
 export class OAuthManager {
   private readonly app: Express;
-  private strategies: Map<string, AbstractOAuthStrategy<unknown>>;
+  private readonly strategies: Map<string, AbstractOAuthStrategy<unknown>>;
 
   constructor(app: Express) {
     this.app = app;

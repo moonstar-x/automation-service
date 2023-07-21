@@ -21,9 +21,9 @@ interface WorkflowOptions {
 }
 
 class LeagueOfLegendsStatsWorkflow extends Workflow<void> {
-  private options: WorkflowOptions;
-  private leagueOfLegendsClient: LeagueOfLegends.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly options: WorkflowOptions;
+  private readonly leagueOfLegendsClient: LeagueOfLegends.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application, metadata: WorkflowMetadata, options: WorkflowOptions) {
     super(application, options.trigger, metadata);

@@ -5,7 +5,7 @@ import * as Types from './types';
 const API_URL = 'https://api.github.com';
 
 export class GitHubClient {
-  private rest: AxiosInstance;
+  private readonly rest: AxiosInstance;
 
   constructor(token: string) {
     this.rest = axios.create({

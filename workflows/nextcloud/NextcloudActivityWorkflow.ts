@@ -37,8 +37,8 @@ interface WebhookPayload {
 }
 
 export class NextcloudActivityWorkflow extends Workflow<WebhookPayload> {
-  private cache: ExpiringCache<string, boolean>;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly cache: ExpiringCache<string, boolean>;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('nextcloud'), {

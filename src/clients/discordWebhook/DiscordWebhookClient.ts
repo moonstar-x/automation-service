@@ -12,7 +12,7 @@ export const DEFAULT_AUTHOR: Types.EmbedAuthor = {
 };
 
 export class DiscordWebhookClient {
-  private webhook: string;
+  private readonly webhook: string;
 
   constructor(webhook: string) {
     this.webhook = webhook;

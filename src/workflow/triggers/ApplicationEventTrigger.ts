@@ -2,8 +2,8 @@ import { Application, ApplicationEvents } from '@application/Application';
 import { Trigger } from '@workflow/Trigger';
 
 export class ApplicationEventTrigger<T extends keyof ApplicationEvents> extends Trigger<ApplicationEvents[T]> {
-  private application: Application;
-  private event: T;
+  private readonly application: Application;
+  private readonly event: T;
 
   constructor(application: Application, event: T) {
     super();

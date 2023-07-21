@@ -54,8 +54,8 @@ interface TriggerPayload {
 }
 
 export class TautulliNotificationsWorkflow extends Workflow<TriggerPayload> {
-  private discordTrackerWebhookClient: DiscordWebhook.Client;
-  private discordStatusWebhookClient: DiscordWebhook.Client;
+  private readonly discordTrackerWebhookClient: DiscordWebhook.Client;
+  private readonly discordStatusWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('tautulli', { needsSecret: true }), {

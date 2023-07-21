@@ -36,8 +36,8 @@ interface ReducedRepoData {
 }
 
 export class GitHubRepoStatsWorkflow extends Workflow<void> {
-  private gitHubClient: GitHub.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly gitHubClient: GitHub.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('0 20 * * 0'), {

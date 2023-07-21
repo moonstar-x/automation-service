@@ -21,7 +21,7 @@ const EMBED_COLORS: Record<BuildResult, number> = {
 const DEFAULT_EMBED_COLOR = 7764205;
 
 export class JenkinsNotificationWorkflow extends Workflow<WebhookPayload> {
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, application.webhookManager.createTrigger('jenkins'), {

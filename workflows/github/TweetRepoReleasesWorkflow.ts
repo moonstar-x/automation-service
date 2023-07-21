@@ -11,8 +11,8 @@ interface WorkflowOptions {
 }
 
 class TweetRepoReleasesWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
-  private options: WorkflowOptions;
-  private twitterClient: Twitter.ClientV2;
+  private readonly options: WorkflowOptions;
+  private readonly twitterClient: Twitter.ClientV2;
 
   constructor(application: Application, metadata: WorkflowMetadata, options: WorkflowOptions) {
     super(

@@ -14,8 +14,8 @@ interface SiteStats {
 }
 
 export class PlausibleStatsWorkflow extends Workflow<void> {
-  private plausibleClient: Plausible.Client;
-  private discordWebhookClient: DiscordWebhook.Client;
+  private readonly plausibleClient: Plausible.Client;
+  private readonly discordWebhookClient: DiscordWebhook.Client;
 
   constructor(application: Application) {
     super(application, new CronTrigger('30 23 * * *'), {

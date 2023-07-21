@@ -6,7 +6,7 @@ import * as Twitter from '@clients/twitter';
 import { config } from '@config/config';
 
 export class AutoRetweetWorkflow extends Workflow<TweetV2SingleStreamResult> {
-  private twitterClient: Twitter.ClientV2;
+  private readonly twitterClient: Twitter.ClientV2;
 
   constructor(application: Application) {
     super(application, application.twitterTriggerManager!.createTrigger(['greencoast_dev']), {

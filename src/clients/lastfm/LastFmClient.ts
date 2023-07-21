@@ -5,8 +5,8 @@ import * as Types from './types';
 const API_URL = 'https://ws.audioscrobbler.com/2.0';
 
 export class LastFmClient {
-  private rest: AxiosInstance;
-  private baseParams: Record<string, string>;
+  private readonly rest: AxiosInstance;
+  private readonly baseParams: Record<string, string>;
 
   constructor(apiKey: string) {
     this.rest = axios.create({
