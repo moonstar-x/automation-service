@@ -2,8 +2,8 @@ import { Workflow, WorkflowMetadata } from '@workflow/Workflow';
 import { Application } from '@application/Application';
 import * as GitHub from '@clients/github';
 import * as Twitter from '@clients/twitter';
-import { levelDatabaseService } from '@services/LevelDatabaseService';
 import { config } from '@config/config';
+import { TwitterOAuthStrategy } from '@oauth/strategies';
 
 interface WorkflowOptions {
   repos: string[]
@@ -12,7 +12,7 @@ interface WorkflowOptions {
 
 class TweetRepoReleasesWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
   private options: WorkflowOptions;
-  private twitterClient: Twitter.ClientV1;
+  private twitterClient: Twitter.ClientV2;
 
   constructor(application: Application, metadata: WorkflowMetadata, options: WorkflowOptions) {
     super(
@@ -23,22 +23,28 @@ class TweetRepoReleasesWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
 
     this.options = options;
 
-    this.twitterClient = new Twitter.ClientV1({
-      appKey: config.custom.twitter.api_key,
-      appSecret: config.custom.twitter.api_key_secret
+    this.twitterClient = new Twitter.ClientV2({
+      clientId: config.custom.twitter.client_id,
+      clientSecret: config.custom.twitter.client_secret
     });
   }
 
-  public override async setup(): Promise<void> {
-    await super.setup();
+  public async preRun(): Promise<void> {
+    const oauthStrategy = this.application.oauthManager.getStrategy('twitter') as TwitterOAuthStrategy;
+
     const { twitterUsername: username } = this.options;
-    const credentials = await levelDatabaseService.get<Twitter.Types.OAuthV1Tokens>(`twitter:creds:v1:${username}`);
+    const credentials = await oauthStrategy.getStoredCredentialsForUser(username);
 
     if (!credentials) {
-      throw new Error(`Twitter credentials for ${username} were not found. You may need to use the oauth/twitter/twitter-v1.ts script.`);
+      throw new Error(`Twitter credentials for ${username} were not found. You may need to authenticate by GET requesting: ${oauthStrategy.getAuthEndpoint()}`);
     }
 
-    await this.twitterClient.login(credentials);
+    await this.twitterClient.login(username, credentials, async (token) => {
+      await oauthStrategy.setStoredCredentialsForUser(username, {
+        accessToken: token.accessToken,
+        refreshToken: token.refreshToken
+      });
+    });
   }
 
   public async run(payload: GitHub.Types.WebhookEvent): Promise<void> {
@@ -46,9 +52,11 @@ class TweetRepoReleasesWorkflow extends Workflow<GitHub.Types.WebhookEvent> {
       return;
     }
 
+    await this.preRun();
+
     const message = `🎉 Version ${payload.release.name} has been released for ${payload.repository.full_name}. Check it out here: ${payload.release.html_url}`;
     const releaseTweet = await this.twitterClient.tweet(message);
-    await this.twitterClient.reply(Twitter.ClientV1.truncateMessage(payload.release.body), releaseTweet.id_str);
+    await this.twitterClient.reply(releaseTweet.id, Twitter.ClientV2.truncateMessage(payload.release.body));
   }
 }
 

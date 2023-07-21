@@ -15,7 +15,7 @@ export abstract class AbstractOAuthStrategy<Credentials> {
       return;
     }
 
-    this.app.route(`${this.getBaseEndpoint()}/auth`)
+    this.app.route(this.getAuthEndpoint())
       .get(this.handleInitialOAuthRequest.bind(this))
       .all(onlySupportedMethods('GET'));
 
@@ -24,11 +24,15 @@ export abstract class AbstractOAuthStrategy<Credentials> {
       .all(onlySupportedMethods('GET'));
   }
 
+  public getAuthEndpoint(): string {
+    return `${this.getBaseEndpoint()}/auth`;
+  }
+
   private getBaseEndpoint(): string {
     return `/oauth/${this.getName()}`;
   }
 
-  protected getCallbackUrl(): string {
+  public getCallbackUrl(): string {
     return `${config.service_url}${this.getBaseEndpoint()}`;
   }
 
@@ -40,7 +44,7 @@ export abstract class AbstractOAuthStrategy<Credentials> {
     return await levelDatabaseService.get<Credentials>(this.getStoredCredentialsKeyForUser(userId));
   }
 
-  protected async setStoredCredentialsForUser(userId: string, credentials: Credentials): Promise<void> {
+  public async setStoredCredentialsForUser(userId: string, credentials: Credentials): Promise<void> {
     if (this.isEnabled()) {
       await levelDatabaseService.set(this.getStoredCredentialsKeyForUser(userId), credentials);
     }

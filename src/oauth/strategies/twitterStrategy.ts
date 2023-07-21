@@ -2,15 +2,11 @@ import { Express, Request, Response, NextFunction } from 'express';
 import { TwitterApi } from 'twitter-api-v2';
 import { UnauthorizedRequestError } from '@express/errors';
 import { AbstractOAuthStrategy } from '@oauth/strategy';
+import { OAuthV2Tokens } from '@clients/twitter/types';
 import { Logger } from '@utils/logging';
 import { config } from '@config/config';
 
 const OAUTH_SCOPES = ['tweet.read', 'users.read', 'offline.access', 'tweet.write'];
-
-interface OAuthCredentials {
-  accessToken: string
-  refreshToken?: string
-}
 
 interface VerifierForState {
   state: string
@@ -18,7 +14,7 @@ interface VerifierForState {
   user: string
 }
 
-export class TwitterOAuthStrategy extends AbstractOAuthStrategy<OAuthCredentials> {
+export class TwitterOAuthStrategy extends AbstractOAuthStrategy<OAuthV2Tokens> {
   private readonly logger: Logger;
   private readonly loginClient: TwitterApi | null;
   private readonly verifierCache: Map<string, VerifierForState>;

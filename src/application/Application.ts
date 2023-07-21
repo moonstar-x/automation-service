@@ -34,7 +34,7 @@ export class Application extends EventEmitter {
   private logger: Logger;
 
   public readonly httpServer: ExpressServer;
-  public readonly oauthManger: OAuthManager;
+  public readonly oauthManager: OAuthManager;
   public readonly webhookManager: WebhookManager;
   public readonly githubTriggerManager: GitHubTriggerManager;
   public readonly twitterTriggerManager: TwitterTriggerManager | null;
@@ -44,7 +44,7 @@ export class Application extends EventEmitter {
     this.workflows = new Map<string, Workflow<unknown>>();
     this.logger = new Logger('Application');
     this.httpServer = new ExpressServer(options.httpServerOptions);
-    this.oauthManger = new OAuthManager(this.httpServer.getApp());
+    this.oauthManager = new OAuthManager(this.httpServer.getApp());
 
     this.webhookManager = new WebhookManager(this.httpServer.getApp());
     this.githubTriggerManager = new GitHubTriggerManager(this.webhookManager.createTrigger('github'));
