@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:16.6.1-alpine AS build
+FROM node:16.15.1-alpine AS build
 
 WORKDIR /tmp/build
 COPY package*.json ./
@@ -11,7 +11,7 @@ RUN npm run build
 RUN rm -rf src
 
 # Image
-FROM node:16.6.1-alpine
+FROM node:16.15.1-alpine
 
 ARG DATE_CREATED
 ARG VERSION
@@ -32,4 +32,4 @@ COPY --from=build /tmp/build ./
 
 ENV NODE_ENV=production
 
-CMD ["node", "./build/index.js"]
+CMD ["node", "./build/src/index.js"]
