@@ -32,4 +32,4 @@ export class LevelDatabaseService {
   }
 }
 
-export const levelDatabaseService = new LevelDatabaseService(path.join(__dirname, '../../data/level'));
+export const levelDatabaseService = new LevelDatabaseService(path.join(process.cwd(), 'data', 'level'));

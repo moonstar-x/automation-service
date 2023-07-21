@@ -92,4 +92,4 @@ export class FileSystemService {
   }
 }
 
-export const fileSystemService = new FileSystemService(path.join(__dirname, '../../data/fs'));
+export const fileSystemService = new FileSystemService(path.join(process.cwd(), 'data', 'fs'));

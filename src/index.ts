@@ -15,7 +15,7 @@ const main = async () => {
 
   await app.twitterTriggerManager?.prepare();
 
-  await app.registerWorkflowsIn(path.join(__dirname, '../workflows'));
+  await app.registerWorkflowsIn(path.join(path.join(process.cwd(), 'workflows')));
 
   await app.githubTriggerManager.start();
   await app.twitterTriggerManager?.start();
