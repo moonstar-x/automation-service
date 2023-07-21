@@ -49,11 +49,11 @@ node ./build/index.js
 
 Unless you want to run the workflows I have defined (which are also present in this repo), using the public Docker image may not be the right choice.
 
-You should instead make your own workflows inside the `src/impl` folder and build the Docker image yourself if you so need to run this through Docker.
+You should instead make your own workflows inside the `workflows` folder and build the Docker image yourself if you so need to run this through Docker.
 
 In any case, when running a container for this, you should:
 
-* Expose the port you've set inside the `config.webhook_port` config.
+* Expose the port you've set inside the `config.http_port` config.
 * Use a volume to `/opt/app/config` with your `config.yml` file inside.
 * Use a volume to `/opt/app/data` to persist the data inside the Level database.
 
@@ -65,9 +65,9 @@ At a bare minimum, your config should look something like this:
 
 * `config.debug` - Setting this to `true` will enable `DEBUG` logging.
 * `config.service_url` - Set this to the publicly accessible URL for this service. This is necessary for certain things such as the `GitHubTrigger` which registers webhooks on repositories based on this value.
-* `config.webhook_port` - Set this to the port you wish your service to be listening to.
+* `config.http_port` - Set this to the port you wish your service to be listening to.
 * `config.webhook_secret` - Set this to a random secret of your choice to allow authenticated webhook calls.
-* `config.enable_twitter_trigger` - Whether the TwitterTrigger should be enabled. This option exists because this trigger needs to make a request to the Twitter API when initializing.
+* `config.enable_twitter_trigger` - Whether the TwitterTrigger should be enabled. This option exists because this trigger needs to make a request to the Twitter API when initializing. At least one workflow with the Twitter trigger needs to exist, otherwise the service will throw an error.
 * `config.disabled_workflows` - This is an array of workflow names that you wish to disable (for whatever reason).
 
 ### Adding Your Own Configuration
@@ -80,7 +80,7 @@ Adding your own configuration could help in case you need to implement your own 
 
 ## Making a Workflow
 
-To make your own workflow, simply create a new file inside the `src/workflow/impl` folder (you may create this file in nested sub-folders as well) and export one (or many) class(es) that extend the `Workflow<T>` abstract class.
+To make your own workflow, simply create a new file inside the `workflows` folder (you may create this file in nested sub-folders as well) and export one (or many) class(es) that extend the `Workflow<T>` abstract class.
 
 Workflows need to only have an instance of `Application` as their constructor parameters. If you need to further parametrize your workflow you should consider creating a base workflow class and only export subclasses that extend your base workflow with whatever parameters you need. If you need an example of this, check out [LeagueOfLegendsStatsWorkflow.ts](https://github.com/moonstar-x/automation-service/tree/master/src/workflow/impl/games/LeagueOfLegendsStatsWorkflow.ts).
 
@@ -92,14 +92,15 @@ Once you have your workflow created, implement its `run()` method, which will ex
 
 If you need a more specialized trigger, you may implement your own class that extends `Trigger<T>`. This class should implement a `init()` method which should initialize the trigger and set when and how is the trigger going to emit its event. Typically, the event is triggered by running `this.emit('trigger', payload?: T)`.
 
-## Using Twitter.ClientV1 (or Twitter.ClientV2)
+## Using Twitter.ClientV2
 
-The Twitter API requires users to authenticate through OAuth in case you need to make requests on a user's behalf. You can get away with using an application bearer token to access the V2 API without user context, but in case you need user context you should then use the corresponding oauth script:
+The Twitter API requires users to authenticate through OAuth in case you need to make requests on a user's behalf. You can get away with using an application bearer token to access the V2 API without user context, but in case you need user context you should then make the following HTTP call:
 
 ```text
-npx ts-node src/scripts/oauth/twitter/twitter-v1.ts
-npx ts-node src/scripts/oauth/twitter/twitter-v2.ts
+GET /oauth/twitter/auth?user=my_username
 ```
+
+This will redirect you to the Twitter authorization page and will forward back to the callback url which is `/oauth/twitter`.
 
 This requires you to have the following inside your `config.custom` config object:
 
@@ -114,9 +115,7 @@ twitter:
     - my_account_handle
 ```
 
-These scripts will start an HTTP server on the same port as `config.webhook_port` and create OAuth URLs for users to login with and will save any token inside the Level database which will be located inside the `data/level` folder.
-
-> This script is super bare-bones, since I really didn't care that much for this because it is typically something that is run only once at the beginning.
+The above procedure can only work with users that are inside the config. Passing an unknown username to the request above will return an error.
 
 ## Data Persisting
 
